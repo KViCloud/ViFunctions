@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 )
 
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,6 +20,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
 		http.Error(w, "Failed to parse form", http.StatusBadRequest)
+		log.Printf("Failed to parse form: %v\n", err)
 		return
 	}
 
@@ -28,37 +28,33 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	file, _, err := r.FormFile("file")
 	if err != nil {
 		http.Error(w, "Failed to retrieve file", http.StatusBadRequest)
+		log.Printf("Failed to retrieve file: %v\n", err)
 		return
 	}
 	defer file.Close()
-
-	// Retrieve the custom tar file name
-	tarFileName := r.FormValue("tar_file_name")
-	if tarFileName == "" {
-		http.Error(w, "Tar file name is required", http.StatusBadRequest)
-		return
-	}
 
 	// Retrieve the image name
 	imageName := r.FormValue("image_name")
 	if imageName == "" {
 		http.Error(w, "Image name is required", http.StatusBadRequest)
+		log.Printf("Image name is required: %v\n", err)
 		return
 	}
 
 	// Create a temporary directory for processing
-	tempDirName := strings.TrimSuffix(tarFileName, ".tar")
-	tempDir, err := os.MkdirTemp("", tempDirName)
+	tempDir, err := os.MkdirTemp("", imageName)
 	if err != nil {
 		http.Error(w, "Failed to create temp directory", http.StatusInternalServerError)
+		log.Printf("Failed to create temp directory: %v\n", err)
 		return
 	}
-	defer os.RemoveAll(tempDir) // Clean up
+	//defer os.RemoveAll(tempDir) // Clean up
 
 	// Create the destination tar file
-	out, err := os.Create(filepath.Join(tempDir, tarFileName))
+	out, err := os.Create(filepath.Join(tempDir, imageName))
 	if err != nil {
 		http.Error(w, "Failed to create destination file", http.StatusInternalServerError)
+		log.Printf("Failed to create destination file: %v\n", err)
 		return
 	}
 	defer out.Close()
@@ -67,13 +63,15 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	_, err = io.Copy(out, file)
 	if err != nil {
 		http.Error(w, "Failed to copy file", http.StatusInternalServerError)
+		log.Printf("Failed to copy file: %v\n", err)
 		return
 	}
 
 	// Extract the tar file
-	err = exec.Command("tar", "-xf", filepath.Join(tempDir, tarFileName), "-C", tempDir).Run()
+	err = exec.Command("tar", "-xf", filepath.Join(tempDir, imageName), "-C", tempDir).Run()
 	if err != nil {
 		http.Error(w, "Failed to extract tar file", http.StatusInternalServerError)
+		log.Printf("Failed to extract tar file: %v\n", err)
 		return
 	}
 
@@ -82,6 +80,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	err = cmd.Run()
 	if err != nil {
 		http.Error(w, "Failed to build image", http.StatusInternalServerError)
+		log.Printf("Failed to build image: %v\n", err)
 		return
 	}
 

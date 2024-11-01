@@ -36,9 +36,6 @@ func TestBuildHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if err := w.WriteField("tar_file_name", "functions_app_67857.tar"); err != nil {
-		t.Fatal(err)
-	}
 	if err := w.WriteField("image_name", "functions_app_67857"); err != nil {
 		t.Fatal(err)
 	}
