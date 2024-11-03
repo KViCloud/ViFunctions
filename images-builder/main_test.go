@@ -12,7 +12,7 @@ import (
 )
 
 func TestBuildHandler(t *testing.T) {
-	tarFilePath := "functions_app_67857.tar"
+	tarFilePath := "source_code.tar"
 
 	if _, err := os.Stat(tarFilePath); os.IsNotExist(err) {
 		t.Fatalf("file %s does not exist", tarFilePath)

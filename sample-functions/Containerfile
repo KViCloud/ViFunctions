@@ -1,5 +1,5 @@
 # Use the official Go image as the builder
-FROM golang:1.20 AS builder
+FROM docker.io/library/golang:1.20 AS builder
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -18,7 +18,7 @@ COPY . .
 RUN go build -o sample-function .
 
 # Start a new stage from scratch
-FROM alpine:latest
+FROM docker.io/library/alpine:latest
 
 # Set the Current Working Directory inside the container
 WORKDIR /root/

@@ -1,4 +1,5 @@
 podman build -t kernel-images-builder .
+podman run -p 8080:8080 kernel-images-builder
 podman tag kernel-images-builder:latest quangnguyen2017/giongfunctions-kernel-images-builder:latest
 
 podman login docker.io

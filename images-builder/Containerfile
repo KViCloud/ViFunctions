@@ -1,33 +1,38 @@
-# Use the official Go image as the builder
-FROM golang:1.20 AS builder
+# Use the official Golang image as a build stage
+FROM golang:1.20-alpine AS builder
 
-# Set the Current Working Directory inside the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the Go Modules and Sum Files
-# COPY go.mod go.sum ./
+# Copy the Go module files and download dependencies
 COPY go.mod ./
-
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
 RUN go mod download
 
 # Copy the source code into the container
 COPY . .
 
-# Build the Go app
+# Build the Go application
 RUN go build -o images-builder .
 
-# Start a new stage from scratch
-FROM quay.io/podman/stable:latest
+# Use a minimal base image for the final stage
+FROM debian:bullseye-slim
+# Install Buildah and its dependencies
+RUN apt-get update && \
+    apt-get install -y buildah && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set the Current Working Directory inside the container
+# Install Buildah and CA certificates
+RUN apt-get update && \
+    apt-get install -y buildah ca-certificates && \
+    update-ca-certificates && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set the working directory in the final image
 WORKDIR /root/
 
-# Copy the Pre-built binary file from the previous stage
+# Copy the binary from the builder stage
 COPY --from=builder /app/images-builder .
-
-# Expose port 8080 to the outside world
-EXPOSE 8080
-
-# Command to run the executable
+# Command to run the binary
 CMD ["./images-builder"]
