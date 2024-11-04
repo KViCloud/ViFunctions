@@ -1,0 +1,21 @@
+# Use a base image that supports Buildah
+FROM registry.fedoraproject.org/fedora:latest
+
+# Install Go and Buildah
+RUN dnf install -y golang buildah && \
+    dnf clean all
+
+# Set the Current Working Directory inside the container
+WORKDIR /app
+
+# Copy the go.mod and go.sum files
+COPY go.mod ./
+
+# Download the Go module dependencies
+RUN go mod download
+
+# Copy the source code into the container
+COPY . .
+
+# Run tests
+CMD ["go", "test", "./..."]
