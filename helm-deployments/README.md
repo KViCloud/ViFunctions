@@ -1,3 +1,8 @@
+minikube config set driver podman
+minikube config set rootless false
+minikube start --driver=podman --container-runtime=cri-o
+minikube delete
+
 ./deploy.sh minikube
 
 ./deploy.sh staging

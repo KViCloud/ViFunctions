@@ -142,9 +142,16 @@ func tagImage(w http.ResponseWriter, imageName string) (string, bool) {
 }
 
 func loginDockerIo(w http.ResponseWriter) bool {
-	//Hard code first, should load from env
-	const username = ""
-	const password = ""
+	// Load username and password from environment variables
+	username := os.Getenv("DOCKER_USERNAME")
+	password := os.Getenv("DOCKER_PASSWORD")
+
+	if username == "" || password == "" {
+		http.Error(w, "Credentials not provided", http.StatusInternalServerError)
+		log.Println("Username or password environment variable is not set")
+		return false
+	}
+
 	log.Println("Login Docker IO")
 	log.Printf("Command: buildah login -u %s -p %s docker.io", username, password)
 	cmd := exec.Command("buildah", "login", "-u", username, "-p", password, "docker.io")
