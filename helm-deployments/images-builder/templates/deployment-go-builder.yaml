@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "images-builder.fullname" . }}-go
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{ include "images-builder.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.goBuilder.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "images-builder.fullname" . }}-go
+  template:
+    metadata:
+      labels:
+        app: {{ include "images-builder.fullname" . }}-go
+    spec:
+      containers:
+        - name: go-builder
+          image: "{{ .Values.goBuilder.image.repository }}:{{ .Values.goBuilder.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.goBuilder.service.port }}
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "400m"
+              memory: "512Mi"

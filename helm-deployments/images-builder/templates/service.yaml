@@ -1,11 +1,31 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-images-builder
+  name: {{ include "images-builder.fullname" . }}-go
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{ include "images-builder.labels" . | indent 4 }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.goBuilder.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.port }}
+    - port: {{ .Values.goBuilder.service.port }}
+      targetPort: {{ .Values.goBuilder.service.port }}
   selector:
-    app: {{ .Release.Name }}-images-builder
+    app: {{ include "images-builder.fullname" . }}-go
+---
+{{- if .Values.pythonBuilder.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "images-builder.fullname" . }}-python
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{ include "images-builder.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.pythonBuilder.service.type }}
+  ports:
+    - port: {{ .Values.pythonBuilder.service.port }}
+      targetPort: {{ .Values.pythonBuilder.service.port }}
+  selector:
+    app: {{ include "images-builder.fullname" . }}-python
+{{- end }}

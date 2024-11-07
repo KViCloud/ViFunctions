@@ -1,0 +1,38 @@
+# Use the official Golang image as a build stage
+FROM golang:1.20-alpine AS builder
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the Go module files and download dependencies
+COPY go.mod ./
+RUN go mod download
+
+# Copy the source code into the container
+COPY . .
+
+# Build the Go application
+RUN go build -o functionbuilder .
+
+# Use a minimal base image for the final stage
+FROM debian:bullseye-slim
+# Install Buildah and its dependencies
+RUN apt-get update && \
+    apt-get install -y buildah && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Buildah and CA certificates
+RUN apt-get update && \
+    apt-get install -y buildah ca-certificates && \
+    update-ca-certificates && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set the working directory in the final image
+WORKDIR /root/
+
+# Copy the binary from the builder stage
+COPY --from=builder /app/functionbuilder .
+# Command to run the binary
+CMD ["./functionbuilder"]

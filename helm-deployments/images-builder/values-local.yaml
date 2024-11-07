@@ -1,0 +1,11 @@
+namespace: kernel
+
+goBuilder:
+  image:
+    tag: latest
+  replicaCount: 1
+
+pythonBuilder:
+  image:
+    tag: latest
+  replicaCount: 1

@@ -1,0 +1,19 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "images-builder.fullname" . }}-go-hpa
+  namespace: {{ .Values.namespace }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "images-builder.fullname" . }}-go
+  minReplicas: {{ .Values.goBuilder.hpa.minReplicas }}
+  maxReplicas: {{ .Values.goBuilder.hpa.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.goBuilder.hpa.cpu }}
