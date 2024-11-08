@@ -12,7 +12,7 @@ import (
 )
 
 func TestBuildHandler(t *testing.T) {
-	files := []string{"examplefunc/main.go", "examplefunc/go.mod", "examplefunc/Containerfile"} // Add more files as needed
+	files := []string{"languages/golang/examplefunc/main.go", "languages/golang/examplefunc/go.mod", "languages/golang/examplefunc/Containerfile"} // Add more files as needed
 
 	var b bytes.Buffer
 	w := multipart.NewWriter(&b)
@@ -22,7 +22,7 @@ func TestBuildHandler(t *testing.T) {
 			t.Fatalf("file %s does not exist", filePath)
 		}
 
-		fw, err := w.CreateFormFile("file", filepath.Base(filePath))
+		fw, err := w.CreateFormFile("files", filepath.Base(filePath))
 		if err != nil {
 			t.Fatal(err)
 		}

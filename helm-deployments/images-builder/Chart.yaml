@@ -1,4 +1,0 @@
-apiVersion: v2
-name: images-builder
-description: A Helm chart for deploying images-builder services
-version: 0.1.0

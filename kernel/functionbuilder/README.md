@@ -47,25 +47,17 @@ To run the tests, simply use the `go test` command:
 ```sh
 go test ./...
 ```
-To run the tests in container (macos/windows):
-
-```sh
-podman build -f container-files/golang/Containerfile-test -t images-builder-test .
-podman run --rm -it --privileged images-builder-test
-```
 ## Push image
-
-To build image, simply use the `go test` command:
 
 Build and tag image command:
 ```sh
-podman build -f container-files/golang/Containerfile -t kernel-images-builder .
-podman tag kernel-images-builder:latest quangnguyen2017/giongfunctions-kernel-images-builder:latest
+podman build -f languages/golang/Containerfile -t functionbuilder .
+podman tag functionbuilder:latest quangnguyen2017/functionbuilder:latest
 ```
 
 Push image command:
 ```sh
 podman login docker.io
-podman push quangnguyen2017/giongfunctions-kernel-images-builder:latest
-podman pull quangnguyen2017/giongfunctions-kernel-images-builder:latest
+podman push quangnguyen2017/functionbuilder:latest
+podman pull quangnguyen2017/functionbuilder:latest
 ```
