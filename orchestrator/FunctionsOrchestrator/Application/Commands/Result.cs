@@ -1,4 +1,4 @@
-namespace FunctionsManager.Application.Commands;
+namespace FunctionsOrchestrator.Application.Commands;
 
 public class Result(bool isSuccess = true, string description = "")
 {

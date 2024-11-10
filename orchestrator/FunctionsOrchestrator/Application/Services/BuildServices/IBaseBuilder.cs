@@ -1,6 +1,6 @@
 using Refit;
 
-namespace FunctionsManager.Application.Services.BuildServices;
+namespace FunctionsOrchestrator.Application.Services.BuildServices;
 
 public interface IBaseBuilder
 {

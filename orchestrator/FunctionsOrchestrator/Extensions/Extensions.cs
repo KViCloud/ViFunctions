@@ -1,9 +1,9 @@
-using FunctionsManager.Application.Commands.Handlers;
-using FunctionsManager.Application.Services.BuildServices;
-using FunctionsManager.Application.Services.DeployServices;
+using FunctionsOrchestrator.Application.Commands.Handlers;
+using FunctionsOrchestrator.Application.Services.BuildServices;
+using FunctionsOrchestrator.Application.Services.DeployServices;
 using Refit;
 
-namespace FunctionsManager.Extensions;
+namespace FunctionsOrchestrator.Extensions;
 
 public static class Extensions
 {

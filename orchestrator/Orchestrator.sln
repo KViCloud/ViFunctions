@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionsManager", "FunctionsManager\FunctionsManager.csproj", "{108943E4-E578-4251-BFCD-536129F3AA6E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionsOrchestrator", "FunctionsOrchestrator\FunctionsOrchestrator.csproj", "{108943E4-E578-4251-BFCD-536129F3AA6E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{16B2700A-A1BE-4713-BA5C-49C6CFA7E4A3}"
 EndProject

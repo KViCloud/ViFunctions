@@ -1,5 +1,5 @@
 using System.Net;
-using FunctionsManager.Application.Services.BuildServices;
+using FunctionsOrchestrator.Application.Services.BuildServices;
 using Refit;
 
 namespace Test.BuildFunction;

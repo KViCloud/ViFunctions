@@ -1,8 +1,8 @@
-using FunctionsManager.Application.Services.BuildServices;
+using FunctionsOrchestrator.Application.Services.BuildServices;
 using MediatR;
 using Refit;
 
-namespace FunctionsManager.Application.Commands.Handlers;
+namespace FunctionsOrchestrator.Application.Commands.Handlers;
 
 public class BuildCommandHandler(
     IGoBuilder goBuilder,

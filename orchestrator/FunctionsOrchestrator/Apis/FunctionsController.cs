@@ -1,8 +1,8 @@
-using FunctionsManager.Application.Commands;
+using FunctionsOrchestrator.Application.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FunctionsManager.Apis;
+namespace FunctionsOrchestrator.Apis;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -14,13 +14,10 @@ public class FunctionsController(IMediator mediator): ControllerBase
         var result = await mediator.Send(command);
         return result.IsSuccess ? Ok() : BadRequest(result);
     }
-    [HttpPost("deploy/{functionName}")]
-    public async Task<IActionResult> Deploy(string functionName)
+    [HttpPost("deploy")]
+    public async Task<IActionResult> Deploy([FromBody] DeployCommand command)
     {
-        var result = await mediator.Send(new DeployCommand()
-        {
-            FunctionName = functionName
-        });
+        var result = await mediator.Send(command);
         return result.IsSuccess ? Ok() : BadRequest(result);
     }
 }

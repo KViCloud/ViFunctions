@@ -1,4 +1,4 @@
-using FunctionsManager.Extensions;
+using FunctionsOrchestrator.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +18,7 @@ app.MapControllers();
 
 app.Run();
 
-namespace FunctionsManager
+namespace FunctionsOrchestrator
 {
     public partial class Program { }
 }

@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FunctionsManager\FunctionsManager.csproj" />
+      <ProjectReference Include="..\FunctionsOrchestrator\FunctionsOrchestrator.csproj" />
     </ItemGroup>
 
     <ItemGroup>

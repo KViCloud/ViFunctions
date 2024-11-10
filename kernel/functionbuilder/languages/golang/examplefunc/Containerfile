@@ -15,7 +15,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go app
-RUN go build -o examplefunc .
+RUN go build -o function .
 
 # Start a new stage from scratch
 FROM docker.io/library/alpine:latest
@@ -24,10 +24,10 @@ FROM docker.io/library/alpine:latest
 WORKDIR /root/
 
 # Copy the Pre-built binary file from the previous stage
-COPY --from=builder /app/examplefunc .
+COPY --from=builder /app/function .
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
 
 # Command to run the executable
-CMD ["./examplefunc"]
+CMD ["./function"]

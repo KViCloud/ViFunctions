@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using FluentAssertions;
-using FunctionsManager;
-using FunctionsManager.Application.Services.BuildServices;
-using FunctionsManager.Application.Services.DeployServices;
+using FunctionsOrchestrator;
+using FunctionsOrchestrator.Application.Services.BuildServices;
+using FunctionsOrchestrator.Application.Services.DeployServices;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 

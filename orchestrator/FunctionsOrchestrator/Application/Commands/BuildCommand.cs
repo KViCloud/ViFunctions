@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace FunctionsManager.Application.Commands;
+namespace FunctionsOrchestrator.Application.Commands;
 
 public class BuildCommand : IRequest<Result>
 {
