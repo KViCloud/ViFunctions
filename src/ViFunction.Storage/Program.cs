@@ -1,6 +1,6 @@
 
-using ViFunction.Store.Data;
-using ViFunction.Store.Models;
+using ViFunction.Storage.Data;
+using ViFunction.Storage.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,3 +52,5 @@ app.MapDelete("/api/functions/{id}", async (int id, FunctionsContext db) =>
 
 // Run the app
 app.Run();
+
+public partial class Program { }

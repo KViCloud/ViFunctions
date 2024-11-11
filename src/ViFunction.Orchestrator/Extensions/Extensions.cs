@@ -1,7 +1,8 @@
 using Refit;
 using ViFunction.Orchestrator.Application.Commands.Handlers;
-using ViFunction.Orchestrator.Application.Services.BuildServices;
+using ViFunction.Orchestrator.Application.Services.Builder;
 using ViFunction.Orchestrator.Application.Services.DeployServices;
+using ViFunction.Orchestrator.Application.Services.Storage;
 
 namespace ViFunction.Orchestrator.Extensions;
 
@@ -11,16 +12,15 @@ public static class Extensions
     {
         builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(typeof(BuildCommandHandler).Assembly); });
 
-        var goBuilderUrl = Environment.GetEnvironmentVariable("Services__GoBuilderUrl");
-        var pythonBuilderUrl = Environment.GetEnvironmentVariable("Services__PythonBuilderUrl");
+        var builderUrl = Environment.GetEnvironmentVariable("Services__BuilderUrl");
+        var storageUrl = Environment.GetEnvironmentVariable("Services__StorageUrl");
         var deployerUrl = Environment.GetEnvironmentVariable("Services__DeployerUrl");
 
-        builder.Services.AddRefitClient<IGoBuilder>()
-            .ConfigureHttpClient(c => c.BaseAddress = new Uri(goBuilderUrl!));
+        builder.Services.AddRefitClient<IBuilder>()
+            .ConfigureHttpClient(c => c.BaseAddress = new Uri(builderUrl!));
+        builder.Services.AddRefitClient<IStorage>()
+            .ConfigureHttpClient(c => c.BaseAddress = new Uri(storageUrl!));
 
-        builder.Services.AddRefitClient<IPythonBuilder>()
-            .ConfigureHttpClient(c => c.BaseAddress = new Uri(pythonBuilderUrl!));
-        
         builder.Services.AddRefitClient<IDeployer>()
             .ConfigureHttpClient(c => c.BaseAddress = new Uri(deployerUrl!));
     }

@@ -2,10 +2,10 @@
 using System.Net.Http.Headers;
 using FluentAssertions;
 using ViFunction.Orchestrator;
-using ViFunction.Orchestrator.Application.Services.BuildServices;
 using ViFunction.Orchestrator.Application.Services.DeployServices;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using ViFunction.Orchestrator.Application.Services.Builder;
 
 namespace ViFunction.Orchestrator.Tests.DeployFunction
 {
@@ -21,7 +21,7 @@ namespace ViFunction.Orchestrator.Tests.DeployFunction
                 builder.ConfigureServices(services =>
                 {
                     var descriptor = services.SingleOrDefault(
-                        d => d.ServiceType == typeof(IGoBuilder));
+                        d => d.ServiceType == typeof(IBuilder));
                     if (descriptor != null) services.Remove(descriptor);
                     services.AddSingleton<IDeployer, StubDeployer>();
                 });

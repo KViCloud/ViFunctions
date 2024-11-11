@@ -18,7 +18,6 @@ app.MapControllers();
 
 app.Run();
 
-namespace ViFunction.Orchestrator
+public partial class Program
 {
-    public partial class Program { }
 }

@@ -1,12 +1,11 @@
 using MediatR;
 using Refit;
-using ViFunction.Orchestrator.Application.Services.BuildServices;
+using ViFunction.Orchestrator.Application.Services.Builder;
 
 namespace ViFunction.Orchestrator.Application.Commands.Handlers;
 
 public class BuildCommandHandler(
-    IGoBuilder goBuilder,
-    IPythonBuilder pythonBuilder,
+    IBuilder builder,
     ILogger<BuildCommandHandler> logger)
     : IRequestHandler<BuildCommand, Result>
 {
@@ -33,7 +32,7 @@ public class BuildCommandHandler(
 
         logger.LogInformation("Detected language: {Language}", language);
         var fileStream =
-            File.OpenRead($"Application/Services/BuildServices/ContainerTemplates/{language}/Containerfile");
+            File.OpenRead($"Application/Services/Builder/ContainerTemplates/{language}/Containerfile");
         streamParts.Add(new StreamPart(fileStream, "Containerfile", "text/plain"));
 
         var result = await BuildFunctionAsync(command, language, streamParts);
@@ -52,12 +51,7 @@ public class BuildCommandHandler(
 
     private async Task<Result> BuildFunctionAsync(BuildCommand command, string language, List<StreamPart> streamParts)
     {
-        var apiResponse = language switch
-        {
-            "Go" => await goBuilder.BuildAsync(command.FunctionName, streamParts),
-            "Python" => await pythonBuilder.BuildAsync(command.FunctionName, streamParts),
-            _ => throw new ArgumentOutOfRangeException()
-        };
+        var apiResponse = await builder.BuildAsync(command.FunctionName, streamParts);
 
         return apiResponse.IsSuccessStatusCode ? new Result() : new Result(false, apiResponse.Error!.Content);
     }

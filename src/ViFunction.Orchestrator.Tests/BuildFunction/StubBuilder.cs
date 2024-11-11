@@ -1,10 +1,10 @@
 using System.Net;
-using ViFunction.Orchestrator.Application.Services.BuildServices;
 using Refit;
+using ViFunction.Orchestrator.Application.Services.Builder;
 
 namespace ViFunction.Orchestrator.Tests.BuildFunction;
 
-public class StubBuilder : IGoBuilder, IPythonBuilder
+public class StubBuilder : IBuilder
 {
     public Task<IApiResponse> BuildAsync(string functionName, IEnumerable<StreamPart> files)
     {

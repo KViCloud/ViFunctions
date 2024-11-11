@@ -14,8 +14,7 @@ var deployer = builder.AddGolangApp("deployer", "../../kernel/functiondeployer")
     .WithHttpEndpoint(targetPort: 8081, port:6101 ,name: "deployer");
 
 var manager = builder.AddProject<Projects.ViFunction_Orchestrator>("manager")
-    .WithEnvironment("Services__GoBuilderUrl", "http://localhost:6001")
-    .WithEnvironment("Services__PythonBuilderUrl", "http://localhost:6002")
+    .WithEnvironment("Services__BuilderUrl", "http://localhost:6001")
     .WithEnvironment("Services__DeployerUrl", "http://localhost:6101");
 
 builder.Build().Run();

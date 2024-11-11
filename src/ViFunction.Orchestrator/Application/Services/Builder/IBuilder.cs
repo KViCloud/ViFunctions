@@ -1,8 +1,8 @@
 using Refit;
 
-namespace ViFunction.Orchestrator.Application.Services.BuildServices;
+namespace ViFunction.Orchestrator.Application.Services.Builder;
 
-public interface IBaseBuilder
+public interface IBuilder
 {
     [Multipart]
     [Post("/build")]
