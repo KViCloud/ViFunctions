@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ViFunction.Orchestrator\ViFunction.Orchestrator.csproj" />
+      <ProjectReference Include="..\ViFunction.Gateway\ViFunction.Gateway.csproj" />
     </ItemGroup>
 
 </Project>

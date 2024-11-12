@@ -13,7 +13,7 @@ var deployer = builder.AddGolangApp("deployer", "../../kernel/functiondeployer")
     .WithEnvironment("Services__Registry", "http://localhost:6200")
     .WithHttpEndpoint(targetPort: 8081, port:6101 ,name: "deployer");
 
-var manager = builder.AddProject<Projects.ViFunction_Orchestrator>("manager")
+var manager = builder.AddProject<Projects.ViFunction_Gateway>("manager")
     .WithEnvironment("Services__BuilderUrl", "http://localhost:6001")
     .WithEnvironment("Services__DeployerUrl", "http://localhost:6101");
 
