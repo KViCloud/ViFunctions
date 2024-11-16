@@ -11,6 +11,6 @@ dependencies:
   - name: gateway
     version: 0.1.0
     repository: file://charts/gateway
-  - name: imageBuilder
+  - name: imagebuilder
     version: 0.1.0
-    repository: file://charts/imageBuilder
+    repository: file://charts/imagebuilder

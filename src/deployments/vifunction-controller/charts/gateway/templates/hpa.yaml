@@ -3,7 +3,11 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "gateway.fullname" . }}
-  namespace: vifunction-controller
+  labels:
+    app.kubernetes.io/name: {{ include "gateway.name" . }}
+    helm.sh/chart: {{ include "gateway.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

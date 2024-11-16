@@ -1,6 +1,6 @@
 replicas: 1
 image:
-  repository: my-dataservice-image
+  repository: my-gateway-image
   tag: latest
 resources:
   limits:
@@ -10,8 +10,10 @@ resources:
     cpu: "250m"
     memory: "128Mi"
 service:
-  type: ClusterIP
-  port: 8080
+  type: LoadBalancer  # Change to LoadBalancer or NodePort
+  port: 80
+  # If using NodePort, specify nodePort
+  # nodePort: 30000-32767
 hpa:
   enabled: false
   minReplicas: 1

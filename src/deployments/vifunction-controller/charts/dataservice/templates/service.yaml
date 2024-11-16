@@ -2,15 +2,18 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "dataservice.fullname" . }}
-  namespace: vifunction-controller
   labels:
-    {{- include "dataservice.labels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ include "dataservice.name" . }}
+    helm.sh/chart: {{ include "dataservice.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: 80
+      targetPort: http
       protocol: TCP
       name: http
   selector:
-    {{- include "dataservice.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ include "dataservice.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

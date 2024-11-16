@@ -1,6 +1,5 @@
 apiVersion: v2
 name: dataservice
-description: A Helm chart for deploying ViFunction.DataService
-type: application
+description: A Helm chart for Kubernetes
 version: 0.1.0
 appVersion: "1.0"

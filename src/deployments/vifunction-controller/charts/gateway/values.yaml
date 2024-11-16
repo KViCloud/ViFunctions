@@ -1,27 +1,19 @@
-replicaCount: 1
-
+replicas: 1
 image:
-  repository: your-docker-repo/vifunction-gateway
-  pullPolicy: IfNotPresent
-  tag: "latest"
-
+  repository: my-gateway-image
+  tag: latest
+resources:
+  limits:
+    cpu: "500m"
+    memory: "256Mi"
+  requests:
+    cpu: "250m"
+    memory: "128Mi"
 service:
-  type: ClusterIP
+  type: LoadBalancer  # External access configuration
   port: 80
-
-ingress:
-  enabled: false
-  annotations: {}
-  hosts: []
-  tls: []
-
 hpa:
-  enabled: true
+  enabled: false
   minReplicas: 1
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
-
-resources: {}
-nodeSelector: {}
-tolerations: []
-affinity: {}
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 75
