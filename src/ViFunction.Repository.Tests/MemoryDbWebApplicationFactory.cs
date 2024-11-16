@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ViFunction.Repository.Data;
+using ViFunction.DataService.Data;
 
 namespace ViFunction.Repository.Tests;
 
@@ -42,7 +42,7 @@ public class MemoryDbWebApplicationFactory<TStartup> : WebApplicationFactory<TSt
 
     private void SeedTestData(FunctionsContext context)
     {
-        context.Functions.Add(new ViFunction.Repository.Models.Function
+        context.Functions.Add(new ViFunction.DataService.Models.Function
         {
             Id = 1,
             Name = "Test Function",

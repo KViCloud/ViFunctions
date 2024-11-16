@@ -5,8 +5,8 @@ using ViFunction.Gateway.Application.Services;
 namespace ViFunction.Gateway.Application.Commands.Handlers;
 
 public class BuildCommandHandler(
-    IBuilder builder,
-    IStorage storage,
+    IImageBuilder imageBuilder,
+    IDataService dataService,
     ILogger<BuildCommandHandler> logger)
     : IRequestHandler<BuildCommand, Result>
 {
@@ -14,7 +14,7 @@ public class BuildCommandHandler(
     {
         logger.LogInformation("Handling build request for function: {FunctionId}", command.FunctionId);
 
-        var funcDto = await storage.GetFunctionAsync(command.FunctionId);
+        var funcDto = await dataService.GetFunctionAsync(command.FunctionId);
 
         var streamParts = new List<StreamPart>();
         foreach (var file in command.Files)
@@ -24,7 +24,7 @@ public class BuildCommandHandler(
             streamParts.Add(new StreamPart(file.OpenReadStream(), file.FileName, file.ContentType));
         }
 
-        var apiResponse = await builder.BuildAsync(funcDto.Image, funcDto.LanguageVersion, streamParts);
+        var apiResponse = await imageBuilder.BuildAsync(funcDto.Image, funcDto.LanguageVersion, streamParts);
         
         if (apiResponse.IsSuccessStatusCode)
         {

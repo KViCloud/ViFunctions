@@ -4,29 +4,14 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using ViFunction.Gateway.Application.Services;
+using ViFunction.Gateway.Tests.Utils;
 
 namespace ViFunction.Gateway.Tests.BuildFunction
 {
-    public class BuildFunctionTests : IClassFixture<WebApplicationFactory<Program>>
+    public class BuildFunctionTests(StubWebApplicationFactory<Program> factory)
+        : IClassFixture<StubWebApplicationFactory<Program>>
     {
-        private readonly WebApplicationFactory<Program> _factory;
-        private HttpClient _client;
-
-        public BuildFunctionTests(WebApplicationFactory<Program> factory)
-        {
-            _factory = factory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureServices(services =>
-                {
-                    var descriptor = services.SingleOrDefault(
-                        d => d.ServiceType == typeof(IBuilder));
-                    if (descriptor != null) services.Remove(descriptor);
-                    services.AddSingleton<IBuilder, StubBuilder>();
-                });
-            });
-
-            _client = _factory.CreateClient();
-        }
+        private HttpClient _client = factory.CreateClient();
 
         [Fact]
         public async Task Forward_ReturnsOk_WhenResultIsSuccess()

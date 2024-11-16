@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.RegisterAppServices();
 
 builder.Services.AddControllers();
+builder.AddServiceDefaults();
 
 var app = builder.Build();
 
@@ -18,6 +19,9 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program
+namespace ViFunction.Gateway
 {
+    public partial class Program
+    {
+    }
 }

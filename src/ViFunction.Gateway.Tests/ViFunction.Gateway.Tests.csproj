@@ -31,6 +31,9 @@
       <None Update="BuildFunction\GoExample\main.go">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="BuildFunction\GoExample\Containerfile">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ViFunction.Repository\ViFunction.Repository.csproj" />
+      <ProjectReference Include="..\ViFunction.DataService\ViFunction.DataService.csproj" />
     </ItemGroup>
 
 </Project>

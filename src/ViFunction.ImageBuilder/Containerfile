@@ -1,0 +1,54 @@
+﻿# Stage 1: Build the application using the SDK image
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy the project file and restore dependencies
+COPY ViFunction.ImageBuilder.csproj .
+RUN dotnet restore "ViFunction.ImageBuilder.csproj"
+
+# Copy the remaining files and build the project
+COPY . .
+RUN dotnet build "ViFunction.ImageBuilder.csproj" -c Release -o /app/build
+
+# Publish the app
+RUN dotnet publish "ViFunction.ImageBuilder.csproj" -c Release -o /app/publish
+
+# Use a base image with Debian
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
+
+ENV DOTNET_ROOT=/usr/share/dotnet
+ENV PATH="$DOTNET_ROOT:$PATH"
+RUN dotnet --version
+
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y \
+    net-tools \
+    iputils-ping \
+    curl \
+    wget \
+    gnupg2 \
+    lsb-release \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Buildah
+RUN apt-get update && apt-get install -y \
+    buildah \
+    && rm -rf /var/lib/apt/lists/*
+RUN buildah --version
+
+
+# Install Go SDK
+RUN wget https://dl.google.com/go/go1.20.5.linux-arm64.tar.gz \
+    && tar -C /usr/local -xzf go1.20.5.linux-arm64.tar.gz \
+    && rm go1.20.5.linux-arm64.tar.gz
+ENV PATH="$PATH:/usr/local/go/bin"
+RUN go version
+    
+# Set the working directory
+WORKDIR /app
+
+# Copy the published app from the build stage
+COPY --from=build /app/publish .
+
+# Set the entrypoint to run the app
+ENTRYPOINT ["dotnet", "ViFunction.ImageBuilder.dll"]

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: dataservice
+description: A Helm chart for deploying ViFunction.DataService
+type: application
+version: 0.1.0
+appVersion: "1.0"

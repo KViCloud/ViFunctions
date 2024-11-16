@@ -1,0 +1,82 @@
+### Initial Setup
+
+1. **Namespace**: The resources have been deployed in the namespace `{{ .Release.Namespace }}`.
+
+2. **Accessing DataService**:
+   Assuming the `dataservice` service is of type `ClusterIP`, it can be accessed within the cluster using the following DNS name:
+    {{ template "dataservice.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+
+3. **Accessing Gateway**:
+   Assuming the `gateway` service is of type `ClusterIP`, it can be accessed within the cluster using the following DNS name:
+    {{ template "gateway.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+
+4. **Ingress Access**:
+   If ingress is enabled and configured, the application can be accessed through the following URL:
+    http(s)://<your-ingress-host>
+
+### Horizontal Pod Autoscaler (HPA)
+
+* **DataService HPA** (if enabled):
+  To check the current scaling status:
+  ```sh
+  kubectl get hpa {{ template "dataservice.fullname" . }} --namespace {{ .Release.Namespace }}
+  ```
+* **Gateway HPA** (if enabled):
+  To check the current scaling status:
+  ```sh
+  kubectl get hpa {{ template "gateway.fullname" . }} --namespace {{ .Release.Namespace }}
+  ```
+
+### Uninstalling the Chart
+
+To uninstall/delete the `{{ .Release.Name }}` deployment:
+```sh
+helm uninstall {{ .Release.Name }} --namespace {{ .Release.Namespace }}
+```
+
+This removes all the Kubernetes components associated with the chart and deletes the release.
+
+### Additional Commands
+
+1. **To get the list of services**:
+   ```sh
+   kubectl get services --namespace {{ .Release.Namespace }}
+   ```
+
+2. **To get the list of pods**:
+   ```sh
+   kubectl get pods --namespace {{ .Release.Namespace }}
+   ```
+
+3. **To describe the services**:
+   ```sh
+   kubectl describe services {{ template "dataservice.fullname" . }} --namespace {{ .Release.Namespace }}
+   kubectl describe services {{ template "gateway.fullname" . }} --namespace {{ .Release.Namespace }}
+   ```
+
+4. **To describe the pods**:
+   ```sh
+   kubectl describe pods --namespace {{ .Release.Namespace }}
+   ```
+
+### Troubleshooting
+
+If you encounter any issues, check the logs of the pods:
+
+```sh
+kubectl logs <pod-name> --namespace {{ .Release.Namespace }}
+```
+
+For example, to view the logs of the first pod returned by:
+```sh
+kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name=dataservice" -o jsonpath="{.items[0].metadata.name}"
+```
+or for the `gateway`:
+```sh
+kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name=gateway" -o jsonpath="{.items[0].metadata.name}"
+```
+
+You can then use the pod name to check logs:
+```sh
+kubectl logs <pod-name> --namespace {{ .Release.Namespace }}
+```

@@ -1,5 +1,5 @@
 using System.Net.Http.Json;
-using ViFunction.Repository.Models;
+using ViFunction.DataService.Models;
 
 namespace ViFunction.Repository.Tests;
 

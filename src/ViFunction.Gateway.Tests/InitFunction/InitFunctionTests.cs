@@ -3,15 +3,15 @@ using System.Net.Http.Headers;
 using FluentAssertions;
 using ViFunction.Gateway.Tests.Utils;
 
-namespace ViFunction.Gateway.Tests.DeployFunction
+namespace ViFunction.Gateway.Tests.InitFunction
 {
     public class BuildFunctionTests(StubWebApplicationFactory<Program> factory)
         : IClassFixture<StubWebApplicationFactory<Program>>
     {
-        private HttpClient _client = factory.CreateClient();
+        private readonly HttpClient _client = factory.CreateClient();
 
         [Fact]
-        public async Task Forward_ReturnsOk_WhenResultIsSuccess()
+        public async Task InitFunctionApp_ShouldSuccess()
         {
             // Arrange
             var content = new MultipartFormDataContent();

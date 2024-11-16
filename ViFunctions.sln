@@ -2,15 +2,15 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViFunction.Gateway", "src\ViFunction.Gateway\ViFunction.Gateway.csproj", "{92188C3B-B592-4791-860C-E5B202C94C58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViFunction.Repository", "src\ViFunction.Repository\ViFunction.Repository.csproj", "{A4BD8B68-5287-421C-9BA9-5417BA0CB09D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViFunction.DataService", "src\ViFunction.DataService\ViFunction.DataService.csproj", "{A4BD8B68-5287-421C-9BA9-5417BA0CB09D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppHost", "src\AppHost\AppHost.csproj", "{2763098D-6D99-407D-B8D0-590068C808B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViFunction.AppHost", "src\ViFunction.AppHost\ViFunction.AppHost.csproj", "{2763098D-6D99-407D-B8D0-590068C808B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViFunction.Gateway.Tests", "src\ViFunction.Gateway.Tests\ViFunction.Gateway.Tests.csproj", "{F5E74F8F-8B8F-44E4-A418-F1185F1B2031}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViFunction.Repository.Tests", "src\ViFunction.Repository.Tests\ViFunction.Repository.Tests.csproj", "{52554F3D-682B-4D71-BCFF-B79C717ADE3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViFuntion.Builder", "src\ViFuntion.Builder\ViFuntion.Builder.csproj", "{2868B249-0F19-4985-9EAC-246586BE20A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViFunction.ImageBuilder", "src\ViFunction.ImageBuilder\ViFunction.ImageBuilder.csproj", "{2868B249-0F19-4985-9EAC-246586BE20A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

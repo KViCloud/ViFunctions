@@ -2,15 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Consul" Version="1.7.14.4" />
-    <PackageReference Include="MediatR" Version="12.4.1" />
-    <PackageReference Include="Refit" Version="8.0.0" />
-    <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
+    <None Update="ContainerTemplates\Golang\1.20\Containerfile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sdk\Golang\1.20\Containerfile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.9.0"/>
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0"/>
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0"/>
@@ -18,16 +24,16 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.9.0"/>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Application\" />
-  </ItemGroup>
 
   <ItemGroup>
-    <None Update="Application\Services\BuildServices\ContainerTemplates\Go\Containerfile">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Application\Services\DeployServices\ContainerTemplates\Go\Containerfile">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Content Include="..\..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
   </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Sdk\Dotnet\8.0\" />
+  </ItemGroup>
+
 </Project>

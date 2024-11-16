@@ -1,0 +1,33 @@
+namespace: vifunction-controller
+
+dataservice:
+  replicaCount: 1
+  image:
+    repository: your-docker-repo/vifunction-dataservice
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  service:
+    type: ClusterIP
+    port: 80
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+
+gateway:
+  replicaCount: 1
+  image:
+    repository: your-docker-repo/vifunction-gateway
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
