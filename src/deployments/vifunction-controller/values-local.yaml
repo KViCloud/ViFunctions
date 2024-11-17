@@ -1,0 +1,52 @@
+# Global default values
+global:
+  replicaCount: 1
+
+dataservice:
+  image:
+    repository: docker.io/quangnguyen2017/vifunction-dataservice
+    tag: latest
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+    requests:
+      cpu: "250m"
+      memory: "128Mi"
+  service:
+    port: 8080
+  hpa:
+    maxReplicas: 3
+
+gateway:
+  image:
+    repository: docker.io/quangnguyen2017/vifunction-gateway
+    tag: latest
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+    requests:
+      cpu: "250m"
+      memory: "128Mi"
+  service:
+    port: 8081
+  hpa:
+    maxReplicas: 3
+
+imagebuilder:
+  replicas: 1
+  image:
+    repository: docker.io/quangnguyen2017/vifunction-imagebuilder
+    tag: latest
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+    requests:
+      cpu: "250m"
+      memory: "128Mi"
+  service:
+    port: 8083
+  hpa:
+    maxReplicas: 3

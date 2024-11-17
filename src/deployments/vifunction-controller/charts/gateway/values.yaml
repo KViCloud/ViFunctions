@@ -1,19 +1,7 @@
 replicas: 1
-image:
-  repository: my-gateway-image
-  tag: latest
-resources:
-  limits:
-    cpu: "500m"
-    memory: "256Mi"
-  requests:
-    cpu: "250m"
-    memory: "128Mi"
 service:
-  type: LoadBalancer  # External access configuration
-  port: 80
+  type: LoadBalancer
 hpa:
-  enabled: false
+  enabled: true
   minReplicas: 1
-  maxReplicas: 3
   targetCPUUtilizationPercentage: 75

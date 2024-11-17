@@ -1,27 +1,47 @@
 #!/bin/bash
 
-# Constants
-NAMESPACE="vifunction-controller"
-RELEASE_NAME="vifunction-controller"
-CHART_PATH="."
+# Script to deploy Helm charts to different environments
 
-# Check if the namespace exists
-if ! kubectl get namespace "$NAMESPACE" > /dev/null 2>&1; then
-  echo "Creating namespace $NAMESPACE"
-  kubectl create namespace "$NAMESPACE"
-else
-  echo "Namespace $NAMESPACE already exists"
+# Function to print usage
+print_usage() {
+  echo "Usage: $0 [environment]"
+  echo "environment: local | staging | production"
+}
+
+# Check if environment is passed
+if [ -z "$1" ]; then
+  echo "Error: environment not specified."
+  print_usage
+  exit 1
 fi
 
-# Update Helm dependencies
-echo "Updating Helm dependencies"
-helm dependency update "$CHART_PATH"
+ENV=$1
 
-# Check if the release already exists
-if helm status "$RELEASE_NAME" --namespace "$NAMESPACE" > /dev/null 2>&1; then
-  echo "Upgrading release $RELEASE_NAME in namespace $NAMESPACE"
-  helm upgrade "$RELEASE_NAME" "$CHART_PATH" --namespace "$NAMESPACE"
+# Set values file based on environment
+case $ENV in
+  local)
+    VALUES_FILE="values-local.yaml"
+    ;;
+  staging)
+    VALUES_FILE="values-staging.yaml"
+    ;;
+  production)
+    VALUES_FILE="values.yaml"  # You can create values-production.yaml if needed
+    ;;
+  *)
+    echo "Error: invalid environment specified."
+    print_usage
+    exit 1
+    ;;
+esac
+
+# Deploy the Helm chart
+echo "Deploying Helm chart for $ENV environment using $VALUES_FILE..."
+helm upgrade --install vifunction-controller ./vifunction-controller -f vifunction-controller/$VALUES_FILE
+
+if [ $? -ne 0 ]; then
+  echo "Deployment failed!"
+  exit 1
 else
-  echo "Installing release $RELEASE_NAME in namespace $NAMESPACE"
-  helm install "$RELEASE_NAME" "$CHART_PATH" --namespace "$NAMESPACE"
+  echo "Deployment succeeded!"
 fi

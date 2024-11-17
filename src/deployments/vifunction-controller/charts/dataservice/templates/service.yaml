@@ -14,6 +14,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: {{ .Values.service.nodePort | default "" }}
+      {{- end }}
   selector:
     app.kubernetes.io/name: {{ include "dataservice.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
