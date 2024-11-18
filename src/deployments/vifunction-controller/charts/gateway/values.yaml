@@ -1,6 +1,9 @@
+namespace: kernel
 replicas: 1
 service:
   type: LoadBalancer
+  targetPort: 443
+  port: 443
 hpa:
   enabled: true
   minReplicas: 1

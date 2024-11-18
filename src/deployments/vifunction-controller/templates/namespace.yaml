@@ -1,6 +1,7 @@
+# templates/namespace.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: vifunction-controller
+  name: {{ .Values.namespace }}
   labels:
-    name: vifunction-controller
+    name: {{ .Values.namespace }}

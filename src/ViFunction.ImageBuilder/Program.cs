@@ -16,4 +16,5 @@ app.MapPost("/build", async (IApiRequestHandler handler, HttpRequest request) =>
 
 });
 
+app.MapGet("/", () => "Healthy!");
 app.Run();

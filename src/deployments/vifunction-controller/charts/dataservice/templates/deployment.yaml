@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "dataservice.fullname" . }}
+  namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ include "dataservice.name" . }}
     helm.sh/chart: {{ include "dataservice.chart" . }}

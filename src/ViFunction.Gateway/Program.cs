@@ -11,17 +11,20 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+  app.UseDeveloperExceptionPage();
 }
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection();app.UseRouting();
+
 app.MapControllers();
+
+app.MapGet("/", () => "Healthy!");
 
 app.Run();
 
 namespace ViFunction.Gateway
 {
-    public partial class Program
-    {
-    }
+  public partial class Program
+  {
+  }
 }

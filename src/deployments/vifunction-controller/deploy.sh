@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Script to deploy Helm charts to different environments
-
+# Constants
+RELEASE_NAME="vifunction"
+CHART_PATH="./vifunction-controller"
 # Function to print usage
 print_usage() {
   echo "Usage: $0 [environment]"
@@ -37,7 +38,7 @@ esac
 
 # Deploy the Helm chart
 echo "Deploying Helm chart for $ENV environment using $VALUES_FILE..."
-helm upgrade --install vifunction-controller ./vifunction-controller -f vifunction-controller/$VALUES_FILE
+helm upgrade --install $RELEASE_NAME $CHART_PATH -f $CHART_PATH/$VALUES_FILE
 
 if [ $? -ne 0 ]; then
   echo "Deployment failed!"

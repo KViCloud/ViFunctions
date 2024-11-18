@@ -1,7 +1,6 @@
 # Global default values
-global:
-  replicaCount: 1
-
+namespace: kernel
+replicas: 1
 dataservice:
   image:
     repository: docker.io/quangnguyen2017/vifunction-dataservice
@@ -13,8 +12,6 @@ dataservice:
     requests:
       cpu: "250m"
       memory: "128Mi"
-  service:
-    port: 8080
   hpa:
     maxReplicas: 3
 
@@ -29,8 +26,6 @@ gateway:
     requests:
       cpu: "250m"
       memory: "128Mi"
-  service:
-    port: 8081
   hpa:
     maxReplicas: 3
 
@@ -46,7 +41,5 @@ imagebuilder:
     requests:
       cpu: "250m"
       memory: "128Mi"
-  service:
-    port: 8083
   hpa:
     maxReplicas: 3

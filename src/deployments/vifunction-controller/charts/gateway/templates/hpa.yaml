@@ -3,6 +3,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "gateway.fullname" . }}
+  namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ include "gateway.name" . }}
     helm.sh/chart: {{ include "gateway.chart" . }}

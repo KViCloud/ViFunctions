@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "imagebuilder.fullname" . }}
+  namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ include "imagebuilder.name" . }}
     helm.sh/chart: {{ include "imagebuilder.chart" . }}

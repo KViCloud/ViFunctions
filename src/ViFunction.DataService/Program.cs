@@ -26,6 +26,8 @@ using (var scope = app.Services.CreateScope())
 }
 #endif
 
+app.MapGet("/", () => "Healthy!");
+
 app.MapGet("/api/functions", async (FunctionsContext db) =>
 {
     var functions = await db.Functions.ToListAsync();
