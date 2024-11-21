@@ -1,0 +1,10 @@
+Welcome to the deployment of vifuntion!
+
+To check the status of your deployments:
+  kubectl get deployments -n {{ .Values.namespace }}
+
+To check the status of your HPAs:
+  kubectl get hpa -n {{ .Values.namespace }}
+
+To check the status of your services:
+  kubectl get services -n {{ .Values.namespace }}

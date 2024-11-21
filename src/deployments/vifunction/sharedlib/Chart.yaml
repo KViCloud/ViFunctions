@@ -1,0 +1,5 @@
+apiVersion: v2
+name: sharedlib
+description: A Helm library chart for common resources
+type: library
+version: 0.1.0

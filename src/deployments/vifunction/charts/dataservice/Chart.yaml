@@ -1,0 +1,8 @@
+apiVersion: v2
+name: dataservice
+description: A Helm chart for deploying the dataservice application
+version: 0.1.0
+dependencies:
+  - name: sharedlib
+    version: 0.1.0
+    repository: file://../../sharedlib  # Referencing from grandparent folder

@@ -1,0 +1,50 @@
+gateway:
+  namespace: vifunction-ns
+  image: docker.io/quangnguyen2017/vifunction-gateway:latest
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+    requests:
+      cpu: "250m"
+      memory: "128Mi"
+  replicas: 1
+  config:
+    key1: value
+    key2: value
+  minReplicas: 1
+  maxReplicas: 5
+
+dataservice:
+  namespace: vifunction-ns
+  image: docker.io/quangnguyen2017/vifunction-dataservice:latest
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+    requests:
+      cpu: "250m"
+      memory: "128Mi"
+  replicas: 1
+  config:
+    key1: value
+    key2: value
+  minReplicas: 1
+  maxReplicas: 5
+
+imagebuilder:
+  namespace: vifunction-ns
+  image: docker.io/quangnguyen2017/vifunction-imagebuilder:latest
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+    requests:
+      cpu: "250m"
+      memory: "128Mi"
+  replicas: 1
+  config:
+    key1: value
+    key2: value
+  minReplicas: 1
+  maxReplicas: 5

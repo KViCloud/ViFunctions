@@ -1,0 +1,1 @@
+{{- include "sharedlib.deployment" (dict "name" "imagebuilder" "namespace" $.Values.namespace "replicas" $.Values.replicas "image" $.Values.image "configMap" "imagebuilder-config") -}}

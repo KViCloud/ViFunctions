@@ -1,0 +1,1 @@
+{{- include "sharedlib.service" (dict "name" "gateway" "namespace" $.Values.namespace) -}}

@@ -1,0 +1,1 @@
+{{- include "sharedlib.configmap" (dict "name" "imagebuilder" "namespace" $.Values.namespace "config" $.Values.config) -}}

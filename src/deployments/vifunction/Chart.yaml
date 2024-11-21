@@ -1,0 +1,17 @@
+apiVersion: v2
+name: vifunction
+description: A Helm chart for deploying vifunction
+version: 0.1.0
+dependencies:
+  - name: sharedlib
+    version: 0.1.0
+    repository: file://sharedlib
+  - name: dataservice
+    version: 0.1.0
+    repository: file://charts/dataservice
+  - name: gateway
+    version: 0.1.0
+    repository: file://charts/gateway
+  - name: imagebuilder
+    version: 0.1.0
+    repository: file://charts/imagebuilder

@@ -1,0 +1,1 @@
+{{- include "sharedlib.service" (dict "name" "imagebuilder" "namespace" $.Values.namespace) -}}

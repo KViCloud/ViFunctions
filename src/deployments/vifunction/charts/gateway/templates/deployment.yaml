@@ -1,0 +1,1 @@
+{{- include "sharedlib.deployment" (dict "name" "gateway" "namespace" $.Values.namespace "replicas" $.Values.replicas "image" $.Values.image "configMap" "gateway-config") -}}
