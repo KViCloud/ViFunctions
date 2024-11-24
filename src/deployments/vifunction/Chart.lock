@@ -1,15 +1,12 @@
 dependencies:
 - name: sharedlib
-  repository: file://sharedlib
+  repository: file://../sharedlib
   version: 0.1.0
-- name: dataservice
-  repository: file://charts/dataservice
+- name: sharedlib
+  repository: file://../sharedlib
   version: 0.1.0
-- name: gateway
-  repository: file://charts/gateway
+- name: sharedlib
+  repository: file://../sharedlib
   version: 0.1.0
-- name: imagebuilder
-  repository: file://charts/imagebuilder
-  version: 0.1.0
-digest: sha256:38cd172231d6c85fee83ec7fb7fdf989917868a5779ab6b52bb1674454c67cdb
-generated: "2024-11-21T09:53:36.437522+07:00"
+digest: sha256:270142f38b67a32e1a0fe09e116b07e74deac5fc8d09364ab09f299747e702e8
+generated: "2024-11-22T12:49:56.590106+07:00"

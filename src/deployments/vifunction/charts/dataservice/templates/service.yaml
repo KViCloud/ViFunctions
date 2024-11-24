@@ -1,1 +1,0 @@
-{{- include "sharedlib.service" (dict "name" "dataservice" "namespace" $.Values.namespace) -}}

@@ -5,13 +5,15 @@ version: 0.1.0
 dependencies:
   - name: sharedlib
     version: 0.1.0
-    repository: file://sharedlib
-  - name: dataservice
+    repository: file://../sharedlib
+    alias: gateway
+
+  - name: sharedlib
     version: 0.1.0
-    repository: file://charts/dataservice
-  - name: gateway
+    repository: file://../sharedlib
+    alias: dataservice
+
+  - name: sharedlib
     version: 0.1.0
-    repository: file://charts/gateway
-  - name: imagebuilder
-    version: 0.1.0
-    repository: file://charts/imagebuilder
+    repository: file://../sharedlib
+    alias: imagebuilder

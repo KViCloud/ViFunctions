@@ -1,1 +1,0 @@
-{{- include "sharedlib.hpa" (dict "name" "imagebuilder" "namespace" $.Values.namespace "minReplicas" $.Values.minReplicas "maxReplicas" $.Values.maxReplicas) -}}

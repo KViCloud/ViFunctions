@@ -1,1 +1,0 @@
-{{- include "sharedlib.hpa" (dict "name" "dataservice" "namespace" $.Values.namespace "minReplicas" $.Values.minReplicas "maxReplicas" $.Values.maxReplicas) -}}

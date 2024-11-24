@@ -1,2 +1,0 @@
-{{- include "sharedlib.hpa" (dict "name" "gateway" "namespace" $.Values.namespace "minReplicas" $.Values.minReplicas "maxReplicas" $.Values.maxReplicas) -}}
-
