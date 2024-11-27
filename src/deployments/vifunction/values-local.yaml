@@ -1,6 +1,7 @@
 gateway:
   namespace: vifunction-ns
   image: docker.io/quangnguyen2017/vifunction-gateway:latest
+  privileged: false
   service:
     type: NodePort
     port: 8080
@@ -13,8 +14,10 @@ gateway:
       memory: "128Mi"
   replicas: 1
   config:
-    key1: value
-    key2: value
+    Services__BuilderUrl: "http://vifunction-imagebuilder:8080"
+    Services__DeployerUrl: "http://vifunction-deployer:8080"
+    Services__DataServiceUrl: "http://vifunction-dataservice:8080"
+  secrets:
   hpa:
     enabled: true
     minReplicas: 1
@@ -35,6 +38,7 @@ gateway:
 dataservice:
   namespace: vifunction-ns
   image: docker.io/quangnguyen2017/vifunction-dataservice:latest
+  privileged: false
   service:
     type: ClusterIP
     port: 8080
@@ -47,8 +51,8 @@ dataservice:
       memory: "128Mi"
   replicas: 1
   config:
-    key1: value
-    key2: value
+  secrets:
+    ConnectionStrings__FunctionsDatabase: "Server=mysql-release.mysql.svc.cluster.local;Database=FunctionDb;User=root;Password=P@ssw0rd;Port=3306;"
   hpa:
     enabled: true
     minReplicas: 1
@@ -61,6 +65,7 @@ dataservice:
 imagebuilder:
   namespace: vifunction-ns
   image: docker.io/quangnguyen2017/vifunction-imagebuilder:latest
+  privileged: true
   service:
     type: ClusterIP
     port: 8080
@@ -73,8 +78,11 @@ imagebuilder:
       memory: "128Mi"
   replicas: 1
   config:
-    key1: value
-    key2: value
+    Registry__BaseUrl: "docker.io"
+  secrets:
+    Registry__User: "nguoikiemtim@gmail.com"
+    Registry__Path: "quangnguyen2017"
+    Registry__Password: "tichcobac555"
   hpa:
     enabled: true
     minReplicas: 1

@@ -1,8 +1,8 @@
-using System.Text.Json.Serialization; // Correct namespace for JSON options
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using ViFunction.DataService.Data;
 using ViFunction.DataService.Models;
-using Microsoft.AspNetCore.Http.Json; // Add this using directive
+using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,15 +16,17 @@ builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+
 var app = builder.Build();
 
-#if DEBUG
+// Apply pending migrations and create the database if it doesn't exist
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<FunctionsContext>();
-    context.Database.EnsureCreated();
+    context.Database.Migrate();
 }
-#endif
+
+RunMigration(app);
 
 app.MapGet("/", () => "Healthy!");
 
@@ -74,8 +76,29 @@ app.MapDelete("/api/functions/{id}", async (int id, FunctionsContext db) =>
     return Results.NoContent();
 });
 
-// Run the app
 app.Run();
+
+void RunMigration(WebApplication app)
+{
+  using (var scope = app.Services.CreateScope())
+  {
+    // Get the logger and FunctionsContext
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var context = scope.ServiceProvider.GetRequiredService<FunctionsContext>();
+
+    try
+    {
+      logger.LogInformation("Starting database migration.");
+      context.Database.Migrate();
+      logger.LogInformation("Database migration completed successfully.");
+    }
+    catch (Exception ex)
+    {
+      logger.LogError(ex, "An error occurred while migrating the database.");
+      throw; // Re-throw the exception to avoid silent failures
+    }
+  }
+}
 
 public partial class Program
 {

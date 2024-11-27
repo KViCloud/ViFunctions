@@ -1,17 +1,14 @@
 using System.Diagnostics;
+using Microsoft.Extensions.Options;
 
 namespace ViFunction.ImageBuilder.Handler
 {
-    public record BuildResult(bool Success, string Message);
-
-    public class ApiRequestHandler(ILogger<ApiRequestHandler> logger) : IApiRequestHandler
+    public class ApiRequestHandler(ILogger<ApiRequestHandler> logger, IOptions<Registry> options) : IApiRequestHandler
     {
+        private readonly Registry _registry = options.Value;
+
         public async Task<BuildResult> HandleApiRequest(HttpRequest request)
         {
-            var registryUrl = Environment.GetEnvironmentVariable("Services__ImageRegistry");
-            if (string.IsNullOrEmpty(registryUrl))
-                return new BuildResult(false, "Docker registry URL is not configured.");
-
             logger.LogInformation("Handling API request.");
 
             var form = await request.ReadFormAsync();
@@ -33,17 +30,25 @@ namespace ViFunction.ImageBuilder.Handler
                 return new BuildResult(false, "Containerfile not found.");
             }
 
-            var buildahBuildCmd = $"buildah bud -f {containerfilePath} -t {imageName} {tempPath}";
+            var buildahBuildCmd = $"buildah bud -f {containerfilePath} -t {imageName}:latest {tempPath}";
             var built = RunCommand(buildahBuildCmd);
             if (!built)
                 return new BuildResult(false, "Build image got an error.");
 
-            // Push image
+            // Login
 
-            var buildahPushCmd = $"buildah push {imageName} {registryUrl}/{imageName}:latest";
+            var buildahLoginCmd = $"buildah login -u {_registry.User} -p {_registry.Password} {_registry.BaseUrl}";
+            var logged = RunCommand(buildahLoginCmd);
+            if (!logged)
+                return new BuildResult(false, "Login got an error.");
+
+            logger.LogInformation("Logged to: {Registry}", _registry.BaseUrl);
+
+            // Push image
+            var buildahPushCmd = $"buildah push {imageName}:latest {_registry.BaseUrl}/{_registry.Path}/{imageName}:latest";
             var pushed = RunCommand(buildahPushCmd);
             if (!pushed)
-                return new BuildResult(false, "Push had an error.");
+                return new BuildResult(false, "Push got an error.");
 
             logger.LogInformation("Build and push successful for image: {ImageName}", imageName);
             return new BuildResult(true, "");

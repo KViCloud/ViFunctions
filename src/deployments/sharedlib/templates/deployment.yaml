@@ -18,8 +18,12 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: {{ .Values.image }}
+          securityContext:
+            privileged: {{ .Values.privileged }}  # Required for Buildah
           ports:
             - containerPort: 8080  # The container will listen on port 8080
           envFrom:
             - configMapRef:
                 name: {{ include "app.fullname" . }}-config
+            - secretRef:
+                name: {{ include "app.fullname" . }}-secret
