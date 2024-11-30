@@ -14,7 +14,7 @@ public class CreateFunctionHandler(IRepository<Function> repository) : IRequestH
         var sanitizedFunctionName = Regex.Replace(request.Name, "[^a-zA-Z0-9]", "").ToLower();
         var function = new Function(
             name: request.Name,
-            image: $"{sanitizedFunctionName}:latest",
+            image: $"{sanitizedFunctionName}",
             language: request.Language,
             languageVersion: request.LanguageVersion,
             userId: request.UserId,

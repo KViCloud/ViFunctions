@@ -13,13 +13,14 @@ namespace ViFunction.ImageBuilder.Handler
 
             var form = await request.ReadFormAsync();
             var files = form.Files;
-            var imageName = form["imageName"].ToString();
+            var image = form["image"].ToString();
             var version = form["version"].ToString();
+            const string defaultTag = "latest";
 
-            if (files.Count == 0 || string.IsNullOrEmpty(imageName))
+            if (files.Count == 0 || string.IsNullOrEmpty(image))
                 return new BuildResult(false, "Files and application name are required.");
 
-            var tempPath = await StoreFilesInTempDirectory(imageName, files);
+            var tempPath = await StoreFilesInTempDirectory(image, files);
 
             // Build Image
             var language = DetectProgrammingLanguage(files);
@@ -30,7 +31,7 @@ namespace ViFunction.ImageBuilder.Handler
                 return new BuildResult(false, "Containerfile not found.");
             }
 
-            var buildahBuildCmd = $"buildah bud -f {containerfilePath} -t {imageName}:latest {tempPath}";
+            var buildahBuildCmd = $"buildah bud -f {containerfilePath} -t {image}:{defaultTag} {tempPath}";
             var built = RunCommand(buildahBuildCmd);
             if (!built)
                 return new BuildResult(false, "Build image got an error.");
@@ -45,12 +46,12 @@ namespace ViFunction.ImageBuilder.Handler
             logger.LogInformation("Logged to: {Registry}", _registry.BaseUrl);
 
             // Push image
-            var buildahPushCmd = $"buildah push {imageName}:latest {_registry.BaseUrl}/{_registry.Path}/{imageName}:latest";
+            var buildahPushCmd = $"buildah push {image}:{defaultTag} {_registry.BaseUrl}/{_registry.Path}/{image}:{defaultTag}";
             var pushed = RunCommand(buildahPushCmd);
             if (!pushed)
                 return new BuildResult(false, "Push got an error.");
 
-            logger.LogInformation("Build and push successful for image: {ImageName}", imageName);
+            logger.LogInformation("Build and push successful for image: {ImageName}", image);
             return new BuildResult(true, "");
         }
 

@@ -17,6 +17,7 @@ gateway:
     Services__BuilderUrl: "http://vifunction-imagebuilder:8080"
     Services__DeployerUrl: "http://vifunction-kubeops:8080"
     Services__StoreUrl: "http://vifunction-store:8080"
+    Services__KubeOpsUrl: "http://vifunction-kubeops:8080"
   secrets:
   hpa:
     enabled: true
