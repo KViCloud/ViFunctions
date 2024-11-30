@@ -15,8 +15,8 @@ gateway:
   replicas: 1
   config:
     Services__BuilderUrl: "http://vifunction-imagebuilder:8080"
-    Services__DeployerUrl: "http://vifunction-deployer:8080"
-    Services__DataServiceUrl: "http://vifunction-dataservice:8080"
+    Services__DeployerUrl: "http://vifunction-kubeops:8080"
+    Services__StoreUrl: "http://vifunction-store:8080"
   secrets:
   hpa:
     enabled: true
@@ -35,9 +35,9 @@ gateway:
             pathType: Prefix
     tls: []
 
-dataservice:
+store:
   namespace: vifunction-ns
-  image: docker.io/quangnguyen2017/vifunction-dataservice:latest
+  image: docker.io/quangnguyen2017/vifunction-store:latest
   privileged: false
   service:
     type: ClusterIP
@@ -83,6 +83,32 @@ imagebuilder:
     Registry__User: "nguoikiemtim@gmail.com"
     Registry__Path: "quangnguyen2017"
     Registry__Password: "tichcobac555"
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCpuUtilizationPercentage: 80
+    targetRamUtilizationPercentage: 80
+  ingress:
+    enabled: false
+
+kubeops:
+  namespace: vifunction-ns
+  image: docker.io/quangnguyen2017/vifunction-kubeops:latest
+  privileged: true
+  service:
+    type: ClusterIP
+    port: 8080
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+    requests:
+      cpu: "250m"
+      memory: "128Mi"
+  replicas: 1
+  config:
+  secrets:
   hpa:
     enabled: true
     minReplicas: 1

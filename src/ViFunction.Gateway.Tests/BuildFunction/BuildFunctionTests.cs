@@ -1,9 +1,9 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
-using ViFunction.Gateway.Application.Services;
 using ViFunction.Gateway.Tests.Utils;
 
 namespace ViFunction.Gateway.Tests.BuildFunction

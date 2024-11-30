@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,12 +14,12 @@ public class StubWebApplicationFactory<TStartup> : WebApplicationFactory<TStartu
         builder.ConfigureServices(services =>
         {
             RemoveService(services, typeof(IImageBuilder));
-            RemoveService(services, typeof(IDeployer));
-            RemoveService(services, typeof(IDataService));
+            RemoveService(services, typeof(IKubeOps));
+            RemoveService(services, typeof(IStore));
 
             services.AddSingleton<IImageBuilder,StubImageBuilder>();
-            services.AddSingleton<IDeployer,StubDeployer>();
-            services.AddSingleton<IDataService,StubDataService>();
+            services.AddSingleton<IKubeOps,StubKubeOps>();
+            services.AddSingleton<IStore,StubStore>();
         });
 
         base.ConfigureWebHost(builder);

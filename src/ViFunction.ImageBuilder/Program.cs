@@ -1,3 +1,4 @@
+using ViFunction.ImageBuilder;
 using ViFunction.ImageBuilder.Handler;
 
 var builder = WebApplication.CreateBuilder(args);

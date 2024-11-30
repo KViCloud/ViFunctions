@@ -2,7 +2,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var mysql = builder.AddMySql("mysql");
 var functionDb = mysql.AddDatabase("FunctionsDatabase");
-var dataService = builder.AddProject<Projects.ViFunction_DataService>("dataService")
+var store = builder.AddProject<Projects.ViFunction_Store>("store")
     .WithReference(functionDb)
     .WaitFor(functionDb)
     .WithHttpEndpoint(port: 6001, name: "dataEndpoint");
@@ -22,7 +22,7 @@ var builderService = builder.AddDockerfile(
     .WithHttpEndpoint(targetPort: 8080, port: 6003, name: "imagebuilder");
 
 var gateway = builder.AddProject<Projects.ViFunction_Gateway>("gateway")
-    .WithEnvironment("Services__DataServiceUrl", "http://localhost:6001")
+    .WithEnvironment("Services__StoreUrl", "http://localhost:6001")
     .WithEnvironment("Services__BuilderUrl", "http://localhost:6003")
     .WithEnvironment("Services__DeployerUrl", "http://localhost:6101")
     .WithHttpsEndpoint(targetPort: 8082, port: 6004, name: "gatewayEndpoint");

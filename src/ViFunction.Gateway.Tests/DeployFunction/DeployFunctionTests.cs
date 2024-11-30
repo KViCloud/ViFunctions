@@ -1,6 +1,9 @@
-﻿using System.Net;
-using System.Net.Http.Headers;
-using FluentAssertions;
+﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+using ViFunction.Gateway.Application.Commands;
 using ViFunction.Gateway.Tests.Utils;
 
 namespace ViFunction.Gateway.Tests.DeployFunction
@@ -14,24 +17,16 @@ namespace ViFunction.Gateway.Tests.DeployFunction
         public async Task Forward_ReturnsOk_WhenResultIsSuccess()
         {
             // Arrange
-            var content = new MultipartFormDataContent();
-            content.Add(new StringContent("1.0"), "Version");
-            content.Add(new StringContent("TestFunction"), "FunctionName");
-
-
-            string directoryPath = "BuildFunction/GoExample"; // Replace with your directory path
-            foreach (var filePath in Directory.GetFiles(directoryPath))
+            var command = new DeployCommand
             {
-                var fileContent = new ByteArrayContent(await File.ReadAllBytesAsync(filePath));
-                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
-                content.Add(fileContent, "Files", Path.GetFileName(filePath));
-            }
+                FunctionId = Guid.NewGuid() // Adjust as per your setup
+            };
 
             // Act
-            var response = await _client.PostAsync("/api/functions/build", content);
+            var response = await _client.PostAsJsonAsync("/api/functions/deploy", command);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }

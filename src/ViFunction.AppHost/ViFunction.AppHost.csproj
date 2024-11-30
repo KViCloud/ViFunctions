@@ -17,7 +17,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\ViFunction.Gateway\ViFunction.Gateway.csproj"/>
-        <ProjectReference Include="..\ViFunction.DataService\ViFunction.DataService.csproj" />
+        <ProjectReference Include="..\ViFunction.Store\ViFunction.Store.csproj" />
     </ItemGroup>
 
     <ItemGroup>

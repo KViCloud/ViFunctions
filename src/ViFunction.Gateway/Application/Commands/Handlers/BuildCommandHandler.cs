@@ -6,7 +6,7 @@ namespace ViFunction.Gateway.Application.Commands.Handlers;
 
 public class BuildCommandHandler(
     IImageBuilder imageBuilder,
-    IDataService dataService,
+    IStore store,
     ILogger<BuildCommandHandler> logger)
     : IRequestHandler<BuildCommand, Result>
 {
@@ -14,7 +14,7 @@ public class BuildCommandHandler(
     {
         logger.LogInformation("Handling build request for function: {FunctionId}", command.FunctionId);
 
-        var funcDto = await dataService.GetFunctionAsync(command.FunctionId);
+        var funcDto = await store.GetFunctionByIdAsync(command.FunctionId);
 
         var streamParts = new List<StreamPart>();
         foreach (var file in command.Files)

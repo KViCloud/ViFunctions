@@ -1,6 +1,10 @@
-﻿using System.Net;
-using System.Net.Http.Headers;
-using FluentAssertions;
+﻿using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+using ViFunction.Gateway.Application.Commands;
+using ViFunction.Gateway.Application.Services;
 using ViFunction.Gateway.Tests.Utils;
 
 namespace ViFunction.Gateway.Tests.InitFunction
@@ -14,24 +18,30 @@ namespace ViFunction.Gateway.Tests.InitFunction
         public async Task InitFunctionApp_ShouldSuccess()
         {
             // Arrange
-            var content = new MultipartFormDataContent();
-            content.Add(new StringContent("1.0"), "Version");
-            content.Add(new StringContent("TestFunction"), "FunctionName");
-
-
-            string directoryPath = "BuildFunction/GoExample"; // Replace with your directory path
-            foreach (var filePath in Directory.GetFiles(directoryPath))
+            var command = new InitCommand
             {
-                var fileContent = new ByteArrayContent(await File.ReadAllBytesAsync(filePath));
-                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
-                content.Add(fileContent, "Files", Path.GetFileName(filePath));
-            }
+                Language = "C#",
+                Version = "9.0",
+                FunctionName = "TestFunction"
+            };
 
             // Act
-            var response = await _client.PostAsync("/api/functions/build", content);
+            var response = await _client.PostAsJsonAsync("/api/functions/init", command);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+        
+        [Fact]
+        public async Task GetAll_ReturnsOkAndValidContent()
+        {
+            // Act
+            var response = await _client.GetAsync("/api/functions");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var functions = await response.Content.ReadFromJsonAsync<List<FunctionDto>>();
+            Assert.NotNull(functions);
         }
     }
 }

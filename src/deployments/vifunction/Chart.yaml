@@ -11,9 +11,14 @@ dependencies:
   - name: sharedlib
     version: 0.1.0
     repository: file://../sharedlib
-    alias: dataservice
+    alias: store
 
   - name: sharedlib
     version: 0.1.0
     repository: file://../sharedlib
     alias: imagebuilder
+
+  - name: sharedlib
+    version: 0.1.0
+    repository: file://../sharedlib
+    alias: kubeops

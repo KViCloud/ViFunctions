@@ -7,12 +7,12 @@ namespace ViFunction.Gateway.Apis;
 
 [Route("api/[controller]")]
 [ApiController]
-public class FunctionsController(IMediator mediator, IDataService dataService): ControllerBase
+public class FunctionsController(IMediator mediator, IStore store): ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var result = await dataService.GetFunctionsAsync();
+        var result = await store.GetAllFunctionsAsync();
         return Ok(result);
     }
     
