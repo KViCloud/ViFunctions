@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.Json;
 using ViFunction.Gateway.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.RegisterAppServices();
 
 builder.Services.AddControllers();
+
+builder.Services.Configure<JsonOptions>(options =>
+{
+  options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
 builder.AddServiceDefaults();
 
 var app = builder.Build();

@@ -10,7 +10,7 @@ public class UpdateFunctionCommandHandler(IRepository<Function> repository) : IR
     {
         var func = await repository.GetByIdAsync(request.Id);
         
-        func.SetStatus(request.FunctionStatus, request.Message);
+        func.SetStatus(request.Status, request.Message);
         
         if (!string.IsNullOrWhiteSpace(request.Image))
             func.SetImage(request.Image);

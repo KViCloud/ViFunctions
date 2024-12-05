@@ -75,12 +75,11 @@ public class Function
         FunctionStatus = FunctionStatus.Built;
         Image = image;
     }
-
-    public void SetId(Guid id) => Id = id;
 }
 public enum FunctionStatus
 {
     None,
     Built,
     Deployed,
+    Destroyed,
 }

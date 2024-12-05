@@ -15,7 +15,11 @@ public static class RegisterExtensions
         var kubeOpsUrl = builder.Configuration["Services:KubeOpsUrl"];
 
         builder.Services.AddRefitClient<IImageBuilder>()
-            .ConfigureHttpClient(c => c.BaseAddress = new Uri(builderUrl!));
+            .ConfigureHttpClient(c =>
+            {
+                c.BaseAddress = new Uri(builderUrl!);
+                c.Timeout = TimeSpan.FromMinutes(10);
+            });
         
         builder.Services.AddRefitClient<IStore>()
             .ConfigureHttpClient(c => c.BaseAddress = new Uri(storeUrl!));

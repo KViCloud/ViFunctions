@@ -30,7 +30,7 @@ public record CreateFunctionRequest(
 
 
 public record UpdateFunctionRequest(
-    Status Status,
+    FunctionStatus Status,
     string Image = "",
     string Message = "");
 
@@ -43,7 +43,7 @@ public class FunctionDto
     public string LanguageVersion { get; set; }
     public string Cluster { get; set; }
     public string UserId { get; set; }
-    public Status Status { get; set; }
+    public FunctionStatus Status { get; set; }
     public string Message { get; set; }
     public string KubernetesName { get; set; }
     public string CpuRequest { get; set; }
@@ -53,9 +53,10 @@ public class FunctionDto
     public string Tier { get; set; }
 }
 
-public enum Status
+public enum FunctionStatus
 {
     None,
     Built,
     Deployed,
+    Destroyed,
 }

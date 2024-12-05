@@ -14,10 +14,10 @@ app.MapPost("/deploy", async (DeploymentRequest request, KubernetesService kuber
     return Results.Ok(success);
 });
 
-app.MapPost("/destroy", async (string name, KubernetesService kubernetesService) =>
+app.MapDelete("/destroy/{name}", async (string name, KubernetesService kubernetesService) =>
 {
     await kubernetesService.DestroyAsync(name);
-    return Results.Ok("Destroy deployment, HPA, and Service completed successfully.");
+    return Results.Ok("Destroy successfully.");
 });
 
 app.Run();

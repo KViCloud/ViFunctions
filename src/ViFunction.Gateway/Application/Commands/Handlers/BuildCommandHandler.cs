@@ -27,7 +27,7 @@ public class BuildCommandHandler(
         var apiResponse = await imageBuilder.BuildAsync(funcDto.Image, funcDto.LanguageVersion, streamParts);
 
         if (apiResponse.IsSuccessStatusCode)
-            await store.UpdateFunctionAsync(funcDto.Id, new(Status.Built, funcDto.Image, "Built"));
+            await store.UpdateFunctionAsync(funcDto.Id, new(FunctionStatus.Built, apiResponse.Content, "Built"));
 
         var result = apiResponse.IsSuccessStatusCode ? new Result() : new Result(false, apiResponse.Error!.Content);
         return result;

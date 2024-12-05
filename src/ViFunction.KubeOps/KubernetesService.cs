@@ -5,8 +5,8 @@ namespace ViFunction.KubeOps;
 
 public class KubernetesService
 {
-    private Kubernetes _kClient;
-    private ILogger<KubernetesService> _logger;
+    private readonly Kubernetes _kClient;
+    private readonly ILogger<KubernetesService> _logger;
     private const string HubNamespace = "funchub-ns";
 
     public KubernetesService(ILogger<KubernetesService> logger)
@@ -63,7 +63,6 @@ public class KubernetesService
             await _kClient.AutoscalingV2.DeleteNamespacedHorizontalPodAutoscalerAsync($"{functionName}-hpa", HubNamespace);
             _logger.LogInformation($"Hpa {functionName} deleted successfully.");
         }
-
 
         var v1ServiceList = await _kClient.ListNamespacedServiceAsync(
             namespaceParameter: HubNamespace,

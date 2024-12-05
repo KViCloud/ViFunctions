@@ -36,4 +36,11 @@ public class FunctionsController(IMediator mediator, IStore store): ControllerBa
         var result = await mediator.Send(command);
         return result.IsSuccess ? Ok() : BadRequest(result);
     }
+
+    [HttpPost("destroy")]
+    public async Task<IActionResult> Destroy([FromBody] DeployCommand command)
+    {
+        var result = await mediator.Send(command);
+        return result.IsSuccess ? Ok() : BadRequest(result);
+    }
 }

@@ -20,14 +20,14 @@ namespace ViFunction.Gateway.Tests.Utils
                     Id = Guid.NewGuid(),
                     Name = "Function1",
                     Language = "C#",
-                    Status = Status.Built
+                    Status = FunctionStatus.Built
                 },
                 new FunctionDto
                 {
                     Id = Guid.NewGuid(),
                     Name = "Function2",
                     Language = "Python",
-                    Status = Status.Deployed
+                    Status = FunctionStatus.Deployed
                 }
             });
         }
@@ -40,7 +40,7 @@ namespace ViFunction.Gateway.Tests.Utils
                 Id = Guid.NewGuid(),
                 Name = "SampleFunction",
                 Language = "JavaScript",
-                Status = Status.None
+                Status = FunctionStatus.None
             });
         }
 
@@ -56,7 +56,7 @@ namespace ViFunction.Gateway.Tests.Utils
                 UserId = request.UserId,
                 Cluster = request.Cluster,
                 Tier = request.Tier,
-                Status = Status.Built
+                Status = FunctionStatus.Built
             };
             var response = new ApiResponse<FunctionDto>(
                 new HttpResponseMessage(HttpStatusCode.Created),

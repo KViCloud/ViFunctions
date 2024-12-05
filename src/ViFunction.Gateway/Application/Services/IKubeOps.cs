@@ -7,8 +7,8 @@ namespace ViFunction.Gateway.Application.Services
         [Post("/deploy")]
         Task<IApiResponse<bool>> DeployAsync([Body] DeployDto request);
 
-        [Post("/destroy")]
-        Task<IApiResponse> RollbackAsync([Body] string name);
+        [Delete("/destroy/{kubernetesName}")]
+        Task<IApiResponse> DestroyAsync(string kubernetesName);
     }
 
     public record DeployDto(

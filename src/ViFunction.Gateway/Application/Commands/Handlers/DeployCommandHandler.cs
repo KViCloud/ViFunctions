@@ -15,13 +15,13 @@ public class DeployCommandHandler(
 
         logger.LogInformation("Handling deployment for function: {FunctionName}", functionDto.Name);
         var apiResponse = await kubeOps.DeployAsync(new DeployDto(
-            functionDto.KubernetesName, 
+            functionDto.KubernetesName,
             functionDto.Image,
             functionDto.CpuRequest,
             functionDto.MemoryRequest,
             functionDto.CpuLimit,
             functionDto.MemoryLimit
-            ));
+        ));
 
         if (!apiResponse.IsSuccessStatusCode)
         {
@@ -31,15 +31,16 @@ public class DeployCommandHandler(
         if (apiResponse.Content)
         {
             logger.LogInformation("{FunctionName} build success", functionDto.Name);
-            await store.UpdateFunctionAsync(functionDto.Id, new(Status.Deployed));
+            await store.UpdateFunctionAsync(functionDto.Id, new(FunctionStatus.Deployed));
         }
         else
         {
             logger.LogInformation("{FunctionName} build failed, auto rollback", functionDto.Name);
             await store.UpdateFunctionAsync(functionDto.Id, new(
-                Status:Status.Deployed,
-                Message:"Build fail, auto rollback"));
+                Status: FunctionStatus.Deployed,
+                Message: "Build fail, auto rollback"));
         }
+
         return new Result();
     }
 }

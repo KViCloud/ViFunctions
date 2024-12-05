@@ -8,7 +8,7 @@ namespace ViFunction.Gateway.Tests.Utils;
 
 public class StubKubeOps : IKubeOps
 {
-    public Task<IApiResponse> RollbackAsync(string name)
+    public Task<IApiResponse> DestroyAsync(string functionName)
     {
         var response = new ApiResponse<string>(new HttpResponseMessage(HttpStatusCode.OK), "Deploy Successful",
             new RefitSettings());
