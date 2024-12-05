@@ -5,7 +5,7 @@ namespace ViFunction.Gateway.Application.Services
     public interface IKubeOps
     {
         [Post("/deploy")]
-        Task<IApiResponse> DeployAsync([Body] DeployDto request);
+        Task<IApiResponse<bool>> DeployAsync([Body] DeployDto request);
 
         [Post("/destroy")]
         Task<IApiResponse> RollbackAsync([Body] string name);

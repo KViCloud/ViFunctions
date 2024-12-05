@@ -23,9 +23,23 @@ public class DeployCommandHandler(
             functionDto.MemoryLimit
             ));
 
-        var result = apiResponse.IsSuccessStatusCode ? new Result() : new Result(false, apiResponse.Error!.Content);
-        logger.LogInformation("{FunctionName} build result: {result}", functionDto.Name,
-            System.Text.Json.JsonSerializer.Serialize(result));
-        return result;
+        if (!apiResponse.IsSuccessStatusCode)
+        {
+            return new Result(false, apiResponse.Error!.Content);
+        }
+
+        if (apiResponse.Content)
+        {
+            logger.LogInformation("{FunctionName} build success", functionDto.Name);
+            await store.UpdateFunctionAsync(functionDto.Id, new(Status.Deployed));
+        }
+        else
+        {
+            logger.LogInformation("{FunctionName} build failed, auto rollback", functionDto.Name);
+            await store.UpdateFunctionAsync(functionDto.Id, new(
+                Status:Status.Deployed,
+                Message:"Build fail, auto rollback"));
+        }
+        return new Result();
     }
 }

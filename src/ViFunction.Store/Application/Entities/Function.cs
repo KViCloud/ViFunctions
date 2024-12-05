@@ -69,6 +69,12 @@ public class Function
         FunctionStatus = functionStatus;
         Message = message;
     }
+    
+    public void SetImage(string image)
+    {
+        FunctionStatus = FunctionStatus.Built;
+        Image = image;
+    }
 
     public void SetId(Guid id) => Id = id;
 }

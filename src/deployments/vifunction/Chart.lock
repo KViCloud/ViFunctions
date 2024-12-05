@@ -8,5 +8,8 @@ dependencies:
 - name: sharedlib
   repository: file://../sharedlib
   version: 0.1.0
-digest: sha256:270142f38b67a32e1a0fe09e116b07e74deac5fc8d09364ab09f299747e702e8
-generated: "2024-11-22T12:49:56.590106+07:00"
+- name: kubeops
+  repository: file://../kubeops
+  version: 0.1.0
+digest: sha256:c22a20ed4a195b3c3dd01ee49acec2daed6502476c1cd5e16b9bbca613512d7e
+generated: "2024-11-30T22:46:02.680694+07:00"

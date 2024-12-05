@@ -11,8 +11,7 @@ var app = builder.Build();
 app.MapPost("/build", async (IApiRequestHandler handler, HttpRequest request) =>
 {
     var buildResult = await handler.HandleApiRequest(request);
-
-    return buildResult.Success ? Results.Ok(buildResult.Message) : Results.BadRequest(buildResult.Message);
+    return buildResult.Success ? Results.Ok(buildResult.Image) : Results.BadRequest(buildResult.Message);
 
 });
 

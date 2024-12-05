@@ -66,7 +66,7 @@ public class FunctionsApiTests : IClassFixture<MemoryDbWebApplicationFactory<Pro
 
         //Act
 
-        response = await _client.PutAsJsonAsync($"/api/functions/{function.Id}", new UpdateStatusCommand()
+        response = await _client.PutAsJsonAsync($"/api/functions/{function.Id}", new UpdateFunctionCommand()
         {
             Id = function.Id,
             FunctionStatus = FunctionStatus.Built,

@@ -11,16 +11,4 @@
     <PackageReference Include="Scriban" Version="5.12.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Templates\deployment.yaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Templates\hpa.yaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Templates\service.yaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

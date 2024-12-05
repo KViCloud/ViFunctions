@@ -15,10 +15,10 @@ public class StubKubeOps : IKubeOps
         return Task.FromResult<IApiResponse>(response);
     }
 
-    Task<IApiResponse> IKubeOps.DeployAsync(DeployDto request)
+    Task<IApiResponse<bool>> IKubeOps.DeployAsync(DeployDto request)
     {
-        var response = new ApiResponse<string>(new HttpResponseMessage(HttpStatusCode.OK), "Deploy Successful",
+        var response = new ApiResponse<bool>(new HttpResponseMessage(HttpStatusCode.OK), true,
             new RefitSettings());
-        return Task.FromResult<IApiResponse>(response);
+        return Task.FromResult<IApiResponse<bool>>(response);
     }
 }

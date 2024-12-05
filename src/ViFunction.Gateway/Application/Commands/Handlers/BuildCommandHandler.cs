@@ -25,17 +25,10 @@ public class BuildCommandHandler(
         }
 
         var apiResponse = await imageBuilder.BuildAsync(funcDto.Image, funcDto.LanguageVersion, streamParts);
-        
+
         if (apiResponse.IsSuccessStatusCode)
-        {
-            funcDto.Status = Status.Built;
-            funcDto.Message = "Built successfully";
-        }
-        else
-        {
-            funcDto.Message = apiResponse.Error!.Content;
-        }
-        
+            await store.UpdateFunctionAsync(funcDto.Id, new(Status.Built, funcDto.Image, "Built"));
+
         var result = apiResponse.IsSuccessStatusCode ? new Result() : new Result(false, apiResponse.Error!.Content);
         return result;
     }

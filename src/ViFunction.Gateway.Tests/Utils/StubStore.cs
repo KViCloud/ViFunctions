@@ -64,7 +64,7 @@ namespace ViFunction.Gateway.Tests.Utils
             return Task.FromResult(response);
         }
 
-        public Task<IApiResponse> UpdateFunctionStatusAsync(Guid id, UpdateStatusRequest request)
+        public Task<IApiResponse> UpdateFunctionAsync(Guid id, UpdateFunctionRequest request)
         {
             var apiResponse = new ApiResponse<bool>(new HttpResponseMessage(HttpStatusCode.OK),
                 true, new RefitSettings());

@@ -6,8 +6,8 @@ public interface IImageBuilder
 {
     [Multipart]
     [Post("/build")]
-    Task<IApiResponse> BuildAsync(
-        [AliasAs("imageName")] string imageName,
+    Task<IApiResponse<string>> BuildAsync(
+        [AliasAs("image")] string imageName,
         [AliasAs("version")] string version,
         [AliasAs("files")] IEnumerable<StreamPart> files);
 }

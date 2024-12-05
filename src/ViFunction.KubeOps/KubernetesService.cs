@@ -1,99 +1,232 @@
 using k8s;
 using k8s.Models;
-using Scriban;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace ViFunction.KubeOps;
 
 public class KubernetesService
 {
-    private readonly IKubernetes _kClient;
-    private readonly IDeserializer _deserializer;
-    private readonly ILogger<KubernetesService> _logger;
+    private Kubernetes _kClient;
+    private ILogger<KubernetesService> _logger;
     private const string HubNamespace = "funchub-ns";
-    private const string KubeConfigPath = "Configs/kubeconfig";
-    private const string DeploymentTemplate = "Templates/deployment.yaml";
-    private const string HpaTemplate = "Templates/hpa.yaml";
-    private const string ServiceTemplate = "Templates/service.yaml";
 
     public KubernetesService(ILogger<KubernetesService> logger)
     {
         _logger = logger;
-        _kClient = BuildKubernetesClient(KubeConfigPath, logger);
-        _deserializer = BuildDeserializer();
+        _kClient = new Kubernetes(KubernetesClientConfiguration.InClusterConfig());
     }
 
-    public async Task DeployAsync(DeploymentRequest request)
+    public async Task<bool> DeployAsync(DeploymentRequest request)
     {
         _logger.LogInformation("Starting deployment process for {Name}", request.Name);
-
-        await CreateAndApplyResourceAsync<V1Deployment>(DeploymentTemplate, new
+        try
         {
-            request.Name,
-            request.Image,
-            request.Replicas,
-            request.CpuRequest,
-            request.MemoryRequest,
-            request.CpuLimit,
-            request.MemoryLimit
-        }, (client, resource, ns) => client.AppsV1.CreateNamespacedDeploymentAsync(resource, ns));
-
-        await CreateAndApplyResourceAsync<V2HorizontalPodAutoscaler>(HpaTemplate, new
+            await CreateDeployment(request);
+            await CreateService(request);
+            await CreateHorizontalPodAutoscaler(request);
+            _logger.LogInformation("Deployment process for {Name} completed successfully", request.Name);
+            return true;
+        }
+        catch (Exception ex)
         {
-            request.Name
-        }, (client, resource, ns) => client.AutoscalingV2.CreateNamespacedHorizontalPodAutoscalerAsync(resource, ns));
+            _logger.LogError(ex, "An error occurred during the deployment process for {Name}: {ExceptionMessage}",
+                request.Name, ex.Message);
+            _logger.LogInformation("Deploy {Name} failed, rollback now", request.Name);
+            await DestroyAsync(request.Name);
+            return false;
+        }
+    }
 
-        await CreateAndApplyResourceAsync<V1Service>(ServiceTemplate, new
+    public async Task DestroyAsync(string functionName)
+    {
+        _logger.LogInformation("Starting destroy {functionName}", functionName);
+        var v1DeploymentList = await _kClient.ListNamespacedDeploymentAsync(
+            namespaceParameter: HubNamespace, 
+            fieldSelector: $"metadata.name={functionName}-deployment"
+            );
+        _logger.LogInformation($"Count {v1DeploymentList.Items.Count()} Deployment {functionName} deleting.");
+
+        if (v1DeploymentList.Items.Any())
         {
-            request.Name
-        }, (client, resource, ns) => client.CoreV1.CreateNamespacedServiceAsync(resource, ns));
+            _logger.LogInformation($"Deployment {functionName} deleting.");
+            await _kClient.DeleteNamespacedDeploymentAsync($"{functionName}-deployment", HubNamespace);
+            _logger.LogInformation($"Deployment {functionName} deleted successfully.");
+        }
 
-        _logger.LogInformation("Deployment process for {Name} completed successfully", request.Name);
+        var v2HorizontalPodAutoscalerList = await _kClient.AutoscalingV2.ListNamespacedHorizontalPodAutoscalerAsync(
+            namespaceParameter: HubNamespace, 
+            fieldSelector: $"metadata.name={functionName}-hpa"
+        );
+
+        if (v2HorizontalPodAutoscalerList.Items.Any())
+        {
+            _logger.LogInformation($"Count {v2HorizontalPodAutoscalerList.Items.Count} Hpa {functionName} deleting.");
+            await _kClient.AutoscalingV2.DeleteNamespacedHorizontalPodAutoscalerAsync($"{functionName}-hpa", HubNamespace);
+            _logger.LogInformation($"Hpa {functionName} deleted successfully.");
+        }
+
+
+        var v1ServiceList = await _kClient.ListNamespacedServiceAsync(
+            namespaceParameter: HubNamespace,
+            fieldSelector: $"metadata.name={functionName}-service"
+            );
+
+        if (v1ServiceList.Items.Any())
+        {
+            _logger.LogInformation($"Count {v1ServiceList.Items.Count} Service {functionName} deleting.");
+            await _kClient.DeleteNamespacedServiceAsync($"{functionName}-service", HubNamespace);
+            _logger.LogInformation($"Service {functionName} deleted successfully.");
+        }
+
+        _logger.LogInformation("Destroy process for {functionName} completed successfully", functionName);
     }
 
-    public async Task RollbackAsync(string resourceName)
+    private async Task CreateDeployment(DeploymentRequest request)
     {
-        _logger.LogInformation("Starting destroy process {Name}", resourceName);
-        await DeleteResourceAsync((name, ns) => _kClient.AppsV1.DeleteNamespacedDeploymentAsync(name, ns), resourceName);
-        await DeleteResourceAsync((name, ns) => _kClient.AutoscalingV2.DeleteNamespacedHorizontalPodAutoscalerAsync(name, ns), resourceName);
-        await DeleteResourceAsync((name, ns) => _kClient.CoreV1.DeleteNamespacedServiceAsync(name, ns), resourceName);
-        _logger.LogInformation("Destroy process for {Name} completed successfully", resourceName);
+        var deployment = new V1Deployment
+        {
+            Metadata = new V1ObjectMeta
+            {
+                Name = $"{request.Name}-deployment",
+                NamespaceProperty = HubNamespace
+            },
+            Spec = new V1DeploymentSpec
+            {
+                Selector = new V1LabelSelector
+                {
+                    MatchLabels = new Dictionary<string, string>
+                    {
+                        { "app", $"{request.Name}" }
+                    }
+                },
+                Replicas = 1,
+                Template = new V1PodTemplateSpec
+                {
+                    Metadata = new V1ObjectMeta
+                    {
+                        Labels = new Dictionary<string, string>
+                        {
+                            { "app", $"{request.Name}" }
+                        }
+                    },
+                    Spec = new V1PodSpec
+                    {
+                        Containers =
+                        [
+                            new V1Container
+                            {
+                                Name = $"{request.Name}",
+                                Image = $"{request.Image}:latest",
+                                Ports =
+                                [
+                                    new V1ContainerPort(80)
+                                ],
+                                Resources = new V1ResourceRequirements
+                                {
+                                    Requests = new Dictionary<string, ResourceQuantity>
+                                    {
+                                        { "cpu", new ResourceQuantity(request.CpuRequest) },
+                                        { "memory", new ResourceQuantity(request.MemoryRequest) }
+                                    },
+                                    Limits = new Dictionary<string, ResourceQuantity>
+                                    {
+                                        { "cpu", new ResourceQuantity(request.CpuLimit) },
+                                        { "memory", new ResourceQuantity(request.MemoryLimit) }
+                                    }
+                                }
+                            }
+                        ],
+                    }
+                }
+            }
+        };
+        var createdDeployment = await _kClient.CreateNamespacedDeploymentAsync(deployment, HubNamespace);
+        Console.WriteLine($"Deployment {createdDeployment.Metadata.Name} created successfully.");
     }
 
-    private IKubernetes BuildKubernetesClient(string kubeConfigPath, ILogger logger)
+    private async Task CreateService(DeploymentRequest request)
     {
-        logger.LogInformation("Building Kubernetes client with kube config at {Path}", kubeConfigPath);
-        var config = KubernetesClientConfiguration.BuildConfigFromConfigFile(kubeConfigPath);
-        return new Kubernetes(config);
+        var service = new V1Service
+        {
+            Metadata = new V1ObjectMeta
+            {
+                Name = $"{request.Name}-service",
+                NamespaceProperty = HubNamespace
+            },
+            Spec = new V1ServiceSpec
+            {
+                Selector = new Dictionary<string, string>
+                {
+                    { "app", $"{request.Name}" }
+                },
+                Ports =
+                [
+                    new V1ServicePort
+                    {
+                        Port = 80,
+                        TargetPort = 80
+                    }
+                ],
+                Type = "ClusterIP"
+            }
+        };
+
+        var createdService = await _kClient.CreateNamespacedServiceAsync(service, HubNamespace);
+        Console.WriteLine($"Service {createdService.Metadata.Name} created successfully.");
     }
 
-    private IDeserializer BuildDeserializer()
+    private async Task CreateHorizontalPodAutoscaler(DeploymentRequest request)
     {
-        return new DeserializerBuilder()
-            .WithNamingConvention(CamelCaseNamingConvention.Instance)
-            .Build();
+        var hpa = new V2HorizontalPodAutoscaler
+        {
+            Metadata = new V1ObjectMeta
+            {
+                Name = $"{request.Name}-hpa",
+                NamespaceProperty = HubNamespace
+            },
+            Spec = new V2HorizontalPodAutoscalerSpec
+            {
+                ScaleTargetRef = new V2CrossVersionObjectReference
+                {
+                    ApiVersion = "apps/v1",
+                    Kind = "Deployment",
+                    Name = $"{request.Name}-deployment"
+                },
+                MinReplicas = 1,
+                MaxReplicas = 10,
+                Metrics =
+                [
+                    new V2MetricSpec
+                    {
+                        Type = "Resource",
+                        Resource = new V2ResourceMetricSource
+                        {
+                            Name = "cpu",
+                            Target = new V2MetricTarget
+                            {
+                                Type = "Utilization",
+                                AverageUtilization = 70
+                            }
+                        }
+                    },
+                    new V2MetricSpec
+                    {
+                        Type = "Resource",
+                        Resource = new V2ResourceMetricSource
+                        {
+                            Name = "memory",
+                            Target = new V2MetricTarget
+                            {
+                                Type = "Utilization",
+                                AverageUtilization = 70 // Example threshold for memory utilization
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var createdHpa = await _kClient.CreateNamespacedHorizontalPodAutoscalerAsync(hpa, HubNamespace);
+        Console.WriteLine($"Horizontal Pod Autoscaler {createdHpa.Metadata.Name} created successfully.");
     }
 
-    private async Task<T> CreateAndApplyResourceAsync<T>(
-        string templatePath, object data, Func<IKubernetes, T, string, Task> createFunc)
-    {
-        _logger.LogInformation("Creating and applying resource from template {TemplatePath}", templatePath);
-
-        var templateContent = await File.ReadAllTextAsync(templatePath);
-        var template = Template.Parse(templateContent);
-        var renderedContent = template.Render(data);
-        var resource = _deserializer.Deserialize<T>(renderedContent);
-
-        await createFunc(_kClient, resource, HubNamespace);
-        _logger.LogInformation("Resource created and applied successfully from template {TemplatePath}", templatePath);
-        return resource;
-    }
-
-    private async Task DeleteResourceAsync(Func<string, string, Task> deleteFunc, string resourceName)
-    {
-        _logger.LogInformation("Deleting resource {ResourceName} in namespace {Namespace}", resourceName, HubNamespace);
-        await deleteFunc(resourceName, HubNamespace);
-        _logger.LogInformation("Resource {ResourceName} deleted successfully from namespace {Namespace}", resourceName, HubNamespace);
-    }
 }

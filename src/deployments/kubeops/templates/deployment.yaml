@@ -15,11 +15,10 @@ spec:
       labels:
         app: {{ include "app.fullname" . }}
     spec:
+      serviceAccountName: {{ include "app.fullname" . }}-sa
       containers:
         - name: {{ .Chart.Name }}
           image: {{ .Values.image }}
-          securityContext:
-            privileged: {{ .Values.privileged }}  # Required for Buildah
           resources:
             requests:
               cpu: {{ .Values.resources.requests.cpu }}
@@ -32,5 +31,3 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "app.fullname" . }}-config
-            - secretRef:
-                name: {{ include "app.fullname" . }}-secret

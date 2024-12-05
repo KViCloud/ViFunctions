@@ -9,14 +9,14 @@ namespace ViFunction.Gateway.Application.Commands.Handlers
     {
         public async Task<Result> Handle(InitCommand request, CancellationToken cancellationToken)
         {
-            var response = await store.CreateFunctionAsync(new CreateFunctionRequest()
-            {
-                Cluster = "Default",
-                Language = request.Language,
-                LanguageVersion = request.Version,
-                Name = request.FunctionName,
-                UserId = "TestUser",
-            });
+            var response = await store.CreateFunctionAsync(new CreateFunctionRequest(
+                Name: request.FunctionName,
+                Language: request.Language,
+                LanguageVersion: request.Version,
+                UserId: "TestUser",
+                Cluster: "Default",
+                Tier: "Standard"
+            ));
 
             return response.IsSuccessStatusCode
                 ? new Result(true, "Initialization Successful")

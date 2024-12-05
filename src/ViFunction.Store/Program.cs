@@ -46,7 +46,7 @@ app.MapPost("/api/functions", async (CreateFunctionCommand command, IMediator me
     return Results.Created($"/api/functions/{result.Id}", result);
 });
 
-app.MapPut("/api/functions/{id}", async (Guid id, UpdateStatusCommand command, IMediator mediator) =>
+app.MapPut("/api/functions/{id}", async (Guid id, UpdateFunctionCommand command, IMediator mediator) =>
 {
     command.Id = id;
     await mediator.Send(command);

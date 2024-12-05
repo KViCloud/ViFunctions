@@ -18,7 +18,7 @@ namespace ViFunction.ImageBuilder.Handler
             const string defaultTag = "latest";
 
             if (files.Count == 0 || string.IsNullOrEmpty(image))
-                return new BuildResult(false, "Files and application name are required.");
+                return new BuildResult(false, "", "Files and application name are required.");
 
             var tempPath = await StoreFilesInTempDirectory(image, files);
 
@@ -28,31 +28,33 @@ namespace ViFunction.ImageBuilder.Handler
             if (!File.Exists(containerfilePath))
             {
                 logger.LogError("Containerfile not found at path: {ContainerfilePath}", containerfilePath);
-                return new BuildResult(false, "Containerfile not found.");
+                return new BuildResult(false, "", "Containerfile not found.");
             }
 
             var buildahBuildCmd = $"buildah bud -f {containerfilePath} -t {image}:{defaultTag} {tempPath}";
             var built = RunCommand(buildahBuildCmd);
             if (!built)
-                return new BuildResult(false, "Build image got an error.");
+                return new BuildResult(false,"", "Build image got an error.");
 
             // Login
 
             var buildahLoginCmd = $"buildah login -u {_registry.User} -p {_registry.Password} {_registry.BaseUrl}";
             var logged = RunCommand(buildahLoginCmd);
             if (!logged)
-                return new BuildResult(false, "Login got an error.");
+                return new BuildResult(false, "","Login got an error.");
 
             logger.LogInformation("Logged to: {Registry}", _registry.BaseUrl);
 
             // Push image
-            var buildahPushCmd = $"buildah push {image}:{defaultTag} {_registry.BaseUrl}/{_registry.Path}/{image}:{defaultTag}";
+            var pushedImage = $"{_registry.BaseUrl}/{_registry.Path}/{image}:{defaultTag}";
+            var buildahPushCmd =
+                $"buildah push {image}:{defaultTag} {pushedImage}";
             var pushed = RunCommand(buildahPushCmd);
             if (!pushed)
-                return new BuildResult(false, "Push got an error.");
+                return new BuildResult(false, "","Push got an error.");
 
-            logger.LogInformation("Build and push successful for image: {ImageName}", image);
-            return new BuildResult(true, "");
+            logger.LogInformation("Build and push successful for image: {pushedImage}", pushedImage);
+            return new BuildResult(true, pushedImage,"");
         }
 
         private async Task<string> StoreFilesInTempDirectory(string imageName, IFormFileCollection files)

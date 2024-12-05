@@ -5,6 +5,7 @@ gateway:
   service:
     type: NodePort
     port: 8080
+    nodePort: 30007
   resources:
     limits:
       cpu: "500m"
@@ -35,7 +36,7 @@ gateway:
           - path: /gateway
             pathType: Prefix
     tls: []
-
+#-------------------------------------------------------------------------------#
 store:
   namespace: vifunction-ns
   image: docker.io/quangnguyen2017/vifunction-store:latest
@@ -62,7 +63,7 @@ store:
     targetRamUtilizationPercentage: 80
   ingress:
     enabled: false
-
+#-------------------------------------------------------------------------------#
 imagebuilder:
   namespace: vifunction-ns
   image: docker.io/quangnguyen2017/vifunction-imagebuilder:latest
@@ -92,7 +93,7 @@ imagebuilder:
     targetRamUtilizationPercentage: 80
   ingress:
     enabled: false
-
+#-------------------------------------------------------------------------------#
 kubeops:
   namespace: vifunction-ns
   image: docker.io/quangnguyen2017/vifunction-kubeops:latest

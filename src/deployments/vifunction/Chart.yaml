@@ -18,7 +18,7 @@ dependencies:
     repository: file://../sharedlib
     alias: imagebuilder
 
-  - name: sharedlib
+  - name: kubeops
     version: 0.1.0
-    repository: file://../sharedlib
+    repository: file://../kubeops
     alias: kubeops

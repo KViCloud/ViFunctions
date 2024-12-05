@@ -14,28 +14,25 @@ public interface IStore
     Task<ApiResponse<FunctionDto>> CreateFunctionAsync([Body] CreateFunctionRequest request);
 
     [Put("/api/functions/{id}")]
-    Task<IApiResponse> UpdateFunctionStatusAsync(Guid id, [Body] UpdateStatusRequest request);
+    Task<IApiResponse> UpdateFunctionAsync(Guid id, [Body] UpdateFunctionRequest request);
 
     [Delete("/api/functions/{id}")]
     Task<IApiResponse> DeleteFunctionAsync(Guid id);
 }
 
-public class CreateFunctionRequest
-{
-    public string Name { get; init; }
-    public string Language { get; set; }
-    public string LanguageVersion { get; set; }
-    public string UserId { get; set; }
-    public string Cluster { get; set; }
-    public string Tier { get; set; }
-}
+public record CreateFunctionRequest(
+    string Name,
+    string Language,
+    string LanguageVersion,
+    string UserId,
+    string Cluster,
+    string Tier);
 
-public class UpdateStatusRequest
-{
-    public Guid Id { get; set; }
-    public Status Status { get; set; }
-    public string Message { get; set; }
-}
+
+public record UpdateFunctionRequest(
+    Status Status,
+    string Image = "",
+    string Message = "");
 
 public class FunctionDto
 {
