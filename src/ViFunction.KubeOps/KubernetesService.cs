@@ -117,7 +117,7 @@ public class KubernetesService
                                 Image = $"{request.Image}",
                                 Ports =
                                 [
-                                    new V1ContainerPort(80)
+                                    new V1ContainerPort(8080)
                                 ],
                                 Resources = new V1ResourceRequirements
                                 {
@@ -161,8 +161,8 @@ public class KubernetesService
                 [
                     new V1ServicePort
                     {
-                        Port = 80,
-                        TargetPort = 80
+                        Port = 8080,
+                        TargetPort = 8080
                     }
                 ],
                 Type = "ClusterIP"

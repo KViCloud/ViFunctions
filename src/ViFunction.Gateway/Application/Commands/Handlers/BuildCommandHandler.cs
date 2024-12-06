@@ -24,7 +24,7 @@ public class BuildCommandHandler(
             streamParts.Add(new StreamPart(file.OpenReadStream(), file.FileName, file.ContentType));
         }
 
-        var apiResponse = await imageBuilder.BuildAsync(funcDto.Image, funcDto.LanguageVersion, streamParts);
+        var apiResponse = await imageBuilder.BuildAsync(funcDto.KubernetesName, funcDto.LanguageVersion, streamParts);
 
         if (apiResponse.IsSuccessStatusCode)
         {

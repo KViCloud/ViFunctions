@@ -13,14 +13,14 @@ namespace ViFunction.ImageBuilder.Handler
 
             var form = await request.ReadFormAsync();
             var files = form.Files;
-            var image = form["image"].ToString();
+            var kname = form["kname"].ToString();
             var version = form["version"].ToString();
             const string defaultTag = "latest";
 
-            if (files.Count == 0 || string.IsNullOrEmpty(image))
+            if (files.Count == 0 || string.IsNullOrEmpty(kname))
                 return new BuildResult(false, "", "Files and application name are required.");
 
-            var tempPath = await StoreFilesInTempDirectory(image, files);
+            var tempPath = await StoreFilesInTempDirectory(kname, files);
 
             // Build Image
             var language = DetectProgrammingLanguage(files);
@@ -31,7 +31,7 @@ namespace ViFunction.ImageBuilder.Handler
                 return new BuildResult(false, "", "Containerfile not found.");
             }
 
-            var buildahBuildCmd = $"buildah bud -f {containerfilePath} -t {image}:{defaultTag} {tempPath}";
+            var buildahBuildCmd = $"buildah bud -f {containerfilePath} -t {kname}:{defaultTag} {tempPath}";
             var built = RunCommand(buildahBuildCmd);
             if (!built)
                 return new BuildResult(false,"", "Build image got an error.");
@@ -46,20 +46,20 @@ namespace ViFunction.ImageBuilder.Handler
             logger.LogInformation("Logged to: {Registry}", _registry.BaseUrl);
 
             // Push image
-            var pushedImage = $"{_registry.BaseUrl}/{_registry.Path}/{image}:{defaultTag}";
+            var image = $"{_registry.BaseUrl}/{_registry.Path}/{kname}:{defaultTag}";
             var buildahPushCmd =
-                $"buildah push {image}:{defaultTag} {pushedImage}";
+                $"buildah push {kname}:{defaultTag} {image}";
             var pushed = RunCommand(buildahPushCmd);
             if (!pushed)
                 return new BuildResult(false, "","Push got an error.");
 
-            logger.LogInformation("Build and push successful for image: {pushedImage}", pushedImage);
-            return new BuildResult(true, pushedImage,"");
+            logger.LogInformation("Build and push successful for image: {pushedImage}", image);
+            return new BuildResult(true, image,"");
         }
 
-        private async Task<string> StoreFilesInTempDirectory(string imageName, IFormFileCollection files)
+        private async Task<string> StoreFilesInTempDirectory(string kname, IFormFileCollection files)
         {
-            var tempPath = Path.Combine(Path.GetTempPath(), imageName);
+            var tempPath = Path.Combine(Path.GetTempPath(), kname);
             Directory.CreateDirectory(tempPath);
             logger.LogInformation("Created temporary directory: {TempPath}", tempPath);
 
