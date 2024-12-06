@@ -6,12 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.RegisterAppServices();
 
-builder.Services.AddControllers();
-
-builder.Services.Configure<JsonOptions>(options =>
-{
-  options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-});
+builder.Services.AddControllers()
+  .AddJsonOptions(options =>
+  {
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+  });
 
 builder.AddServiceDefaults();
 

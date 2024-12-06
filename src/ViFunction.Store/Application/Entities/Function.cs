@@ -11,7 +11,7 @@ public class Function
     [MaxLength(10)] public string LanguageVersion { get; private set; }
     [MaxLength(100)] public string Cluster { get; private set; }
     [MaxLength(50)] public string UserId { get; private set; }
-    [MaxLength(50)] public FunctionStatus FunctionStatus { get; private set; }
+    [MaxLength(50)] public FunctionStatus Status { get; private set; }
     [MaxLength(500)] public string Message { get; private set; }
     [MaxLength(100)] public string KubernetesName { get; private set; }
     [MaxLength(50)] public string Tier { get; set; }
@@ -36,7 +36,7 @@ public class Function
         Language = language;
         LanguageVersion = languageVersion;
         UserId = userId;
-        FunctionStatus = FunctionStatus.None;
+        Status = FunctionStatus.None;
         Message = "Created";
         KubernetesName = kubernetesName;
     }
@@ -66,13 +66,13 @@ public class Function
         FunctionStatus functionStatus,
         string message)
     {
-        FunctionStatus = functionStatus;
+        Status = functionStatus;
         Message = message;
     }
     
     public void SetImage(string image)
     {
-        FunctionStatus = FunctionStatus.Built;
+        Status = FunctionStatus.Built;
         Image = image;
     }
 }

@@ -10,7 +10,7 @@ public record FunctionDto(
     string LanguageVersion,
     string Cluster,
     string UserId,
-    string FunctionStatus,
+    FunctionStatus Status,
     string Message,
     string KubernetesName,
     string CpuRequest,

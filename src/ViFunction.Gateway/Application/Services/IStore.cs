@@ -34,7 +34,7 @@ public record UpdateFunctionRequest(
     string Image = "",
     string Message = "");
 
-public class FunctionDto
+public record FunctionDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

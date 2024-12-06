@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ViFunction.Gateway.Application.Commands;
 using ViFunction.Gateway.Tests.Utils;
 
-namespace ViFunction.Gateway.Tests.DeployFunction
+namespace ViFunction.Gateway.Tests.TestSuites.DeployFunction
 {
     public class BuildFunctionTests(StubWebApplicationFactory<Program> factory)
         : IClassFixture<StubWebApplicationFactory<Program>>

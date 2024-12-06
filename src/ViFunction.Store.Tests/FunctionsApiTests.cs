@@ -1,4 +1,6 @@
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using ViFunction.Store.Application.Dtos;
 using ViFunction.Store.Application.Entities;
 using ViFunction.Store.Application.Requests;
@@ -19,11 +21,11 @@ public class FunctionsApiTests : IClassFixture<MemoryDbWebApplicationFactory<Pro
     {
         var responseAll = await _client.GetAsync($"/api/functions/");
         responseAll.EnsureSuccessStatusCode();
-        var functions = await responseAll.Content.ReadFromJsonAsync<List<FunctionDto>>();
+        var functions = await responseAll.Content.ReadResponseAsync<List<FunctionDto>>();
 
         var response = await _client.GetAsync($"/api/functions/{functions!.First().Id}");
         response.EnsureSuccessStatusCode();
-        var function = await response.Content.ReadFromJsonAsync<FunctionDto>();
+        var function = await response.Content.ReadResponseAsync<FunctionDto>();
         Assert.NotNull(function);
     }
 
@@ -40,11 +42,11 @@ public class FunctionsApiTests : IClassFixture<MemoryDbWebApplicationFactory<Pro
         };
 
         var response = await _client.PostAsJsonAsync("/api/functions", command);
-        
+
         //Assert
         response.EnsureSuccessStatusCode();
 
-        var createdFunction = await response.Content.ReadFromJsonAsync<FunctionDto>();
+        var createdFunction = await response.Content.ReadResponseAsync<FunctionDto>();
         Assert.NotNull(createdFunction);
         Assert.Equal("New Function", createdFunction.Name);
     }
@@ -62,10 +64,9 @@ public class FunctionsApiTests : IClassFixture<MemoryDbWebApplicationFactory<Pro
         };
         var response = await _client.PostAsJsonAsync("/api/functions", command);
         response.EnsureSuccessStatusCode();
-        var function = await response.Content.ReadFromJsonAsync<FunctionDto>();
+        var function = await response.Content.ReadResponseAsync<FunctionDto>();
 
         //Act
-
         response = await _client.PutAsJsonAsync($"/api/functions/{function.Id}", new UpdateFunctionCommand()
         {
             Id = function.Id,
@@ -76,9 +77,10 @@ public class FunctionsApiTests : IClassFixture<MemoryDbWebApplicationFactory<Pro
         //Assert
         response.EnsureSuccessStatusCode();
         response = await _client.GetAsync($"/api/functions/{function.Id}");
-        function = await response.Content.ReadFromJsonAsync<FunctionDto>();
+
+        function = await response.Content.ReadResponseAsync<FunctionDto>();
         Assert.NotNull(function);
-        Assert.Equal(FunctionStatus.Built.ToString(), function.FunctionStatus);
+        Assert.Equal(FunctionStatus.Built, function.Status);
     }
 
     [Fact]
@@ -94,11 +96,25 @@ public class FunctionsApiTests : IClassFixture<MemoryDbWebApplicationFactory<Pro
         };
         var response = await _client.PostAsJsonAsync("/api/functions", command);
         response.EnsureSuccessStatusCode();
-        var function = await response.Content.ReadFromJsonAsync<FunctionDto>();
+        var function = await response.Content.ReadResponseAsync<FunctionDto>();
 
         //Act
         var getResponse = await _client.DeleteAsync($"/api/functions/{function!.Id}");
         //Assert
         Assert.Equal(System.Net.HttpStatusCode.OK, getResponse.StatusCode);
+    }
+}
+
+public static class JsonExtensions
+{
+    public static async Task<T> ReadResponseAsync<T>(this HttpContent content)
+    {
+        var jsonOptions = new JsonSerializerOptions
+        {
+            Converters = { new JsonStringEnumConverter() },
+            PropertyNameCaseInsensitive = true
+        };
+        var json = await content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<T>(json, jsonOptions);
     }
 }

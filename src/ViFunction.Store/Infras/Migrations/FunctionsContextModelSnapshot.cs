@@ -40,10 +40,6 @@ namespace ViFunction.Store.Infras.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
 
-                    b.Property<int>("FunctionStatus")
-                        .HasMaxLength(50)
-                        .HasColumnType("int");
-
                     b.Property<string>("Image")
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
@@ -75,6 +71,10 @@ namespace ViFunction.Store.Infras.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<int>("Status")
+                        .HasMaxLength(50)
+                        .HasColumnType("int");
 
                     b.Property<string>("Tier")
                         .HasMaxLength(50)

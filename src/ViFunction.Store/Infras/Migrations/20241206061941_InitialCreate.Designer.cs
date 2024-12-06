@@ -12,7 +12,7 @@ using ViFunction.Store.Infras;
 namespace ViFunction.Store.Infras.Migrations
 {
     [DbContext(typeof(FunctionsContext))]
-    [Migration("20241130042848_InitialCreate")]
+    [Migration("20241206061941_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -42,10 +42,6 @@ namespace ViFunction.Store.Infras.Migrations
                     b.Property<string>("CpuRequest")
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
-
-                    b.Property<int>("FunctionStatus")
-                        .HasMaxLength(50)
-                        .HasColumnType("int");
 
                     b.Property<string>("Image")
                         .HasMaxLength(200)
@@ -78,6 +74,10 @@ namespace ViFunction.Store.Infras.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<int>("Status")
+                        .HasMaxLength(50)
+                        .HasColumnType("int");
 
                     b.Property<string>("Tier")
                         .HasMaxLength(50)

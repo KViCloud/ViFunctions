@@ -7,7 +7,7 @@ using ViFunction.Gateway.Application.Commands;
 using ViFunction.Gateway.Application.Services;
 using ViFunction.Gateway.Tests.Utils;
 
-namespace ViFunction.Gateway.Tests.InitFunction
+namespace ViFunction.Gateway.Tests.TestSuites.InitFunction
 {
     public class BuildFunctionTests(StubWebApplicationFactory<Program> factory)
         : IClassFixture<StubWebApplicationFactory<Program>>

@@ -114,7 +114,7 @@ public class KubernetesService
                             new V1Container
                             {
                                 Name = $"{request.Name}",
-                                Image = $"{request.Image}:latest",
+                                Image = $"{request.Image}",
                                 Ports =
                                 [
                                     new V1ContainerPort(80)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using ViFunction.Gateway.Tests.Utils;
 
-namespace ViFunction.Gateway.Tests.BuildFunction
+namespace ViFunction.Gateway.Tests.TestSuites.BuildFunction
 {
     public class BuildFunctionTests(StubWebApplicationFactory<Program> factory)
         : IClassFixture<StubWebApplicationFactory<Program>>
@@ -32,7 +32,6 @@ namespace ViFunction.Gateway.Tests.BuildFunction
 
             // Act
             var response = await _client.PostAsync("/api/functions/build", content);
-
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
