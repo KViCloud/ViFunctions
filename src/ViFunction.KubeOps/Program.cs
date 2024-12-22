@@ -1,22 +1,24 @@
-using System.Runtime.CompilerServices;
 using ViFunction.KubeOps;
-[assembly: InternalsVisibleTo("ViFunction.KubeOps.Tests")]
+using ViFunction.KubeOps.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-builder.Services.AddSingleton<KubernetesService>(); // Register the service
+builder.Services.AddSingleton<IOperation, Operation>();
+
+builder.Services.AddHostedService<EventWatcher>();
 
 var app = builder.Build();
 
-app.MapPost("/deploy", async (DeploymentRequest request, KubernetesService kubernetesService) =>
+app.MapPost("/deploy", async (DeploymentRequest request, Operation ops) =>
 {
-    var success = await kubernetesService.DeployAsync(request);
+    var success = await ops.DeployAsync(request);
     return Results.Ok(success);
 });
 
-app.MapDelete("/destroy/{name}", async (string name, KubernetesService kubernetesService) =>
+app.MapDelete("/destroy/{name}", async (string name, Operation ops) =>
 {
-    await kubernetesService.DestroyAsync(name);
+    await ops.DestroyAsync(name);
     return Results.Ok("Destroy successfully.");
 });
 

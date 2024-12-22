@@ -1,15 +1,15 @@
 using k8s;
 using k8s.Models;
 
-namespace ViFunction.KubeOps;
+namespace ViFunction.KubeOps.Services;
 
-public class KubernetesService
+public class Operation: IOperation
 {
     private readonly Kubernetes _kClient;
-    private readonly ILogger<KubernetesService> _logger;
+    private readonly ILogger<Operation> _logger;
     private const string HubNamespace = "funchub-ns";
 
-    public KubernetesService(ILogger<KubernetesService> logger)
+    public Operation(ILogger<Operation> logger)
     {
         _logger = logger;
         _kClient = new Kubernetes(KubernetesClientConfiguration.InClusterConfig());
