@@ -28,9 +28,9 @@ The architecture of our cloud function platform consists of several key componen
 
 ### Prerequisites
 
-- Minikube
+- K3s
 - Helm
-- Golang Sdk
+- Dotnet Sdk
 - Docker or Podman
 - Buildah
 

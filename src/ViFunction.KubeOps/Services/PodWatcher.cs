@@ -11,10 +11,7 @@ public class EventWatcher : BackgroundService
     public EventWatcher(ILogger<EventWatcher> logger)
     {
         _logger = logger;
-
-        // Load kubernetes config
-        var config = KubernetesClientConfiguration.BuildDefaultConfig();
-        _kubernetesClient = new k8s.Kubernetes(config);
+        _kubernetesClient = new Kubernetes(KubernetesClientConfiguration.InClusterConfig());
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
