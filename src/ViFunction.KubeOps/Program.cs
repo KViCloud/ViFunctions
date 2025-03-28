@@ -10,13 +10,13 @@ builder.Services.AddHostedService<EventWatcher>();
 
 var app = builder.Build();
 
-app.MapPost("/deploy", async (DeploymentRequest request, Operation ops) =>
+app.MapPost("/deploy", async (DeploymentRequest request, IOperation ops) =>
 {
     var success = await ops.DeployAsync(request);
     return Results.Ok(success);
 });
 
-app.MapDelete("/destroy/{name}", async (string name, Operation ops) =>
+app.MapDelete("/destroy/{name}", async (string name, IOperation ops) =>
 {
     await ops.DestroyAsync(name);
     return Results.Ok("Destroy successfully.");

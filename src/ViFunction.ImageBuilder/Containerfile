@@ -38,9 +38,9 @@ RUN buildah --version
 
 
 # Install Go SDK
-RUN wget https://dl.google.com/go/go1.20.5.linux-arm64.tar.gz \
-    && tar -C /usr/local -xzf go1.20.5.linux-arm64.tar.gz \
-    && rm go1.20.5.linux-arm64.tar.gz
+RUN wget https://dl.google.com/go/go1.20.5.linux-amd64.tar.gz \
+    && tar -C /usr/local -xzf go1.20.5.linux-amd64.tar.gz \
+    && rm go1.20.5.linux-amd64.tar.gz
 ENV PATH="$PATH:/usr/local/go/bin"
 RUN go version
     
