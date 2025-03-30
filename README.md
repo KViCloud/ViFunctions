@@ -38,30 +38,40 @@ The architecture of our cloud function platform consists of several key componen
 
 ### Installation
 
-1. **Clone the repository**:
+1. **Clone the Repository**:
   ```bash
     git clone https://github.com/NguyenQuang2016/ViFunctions.git
-    cd ViFunctions/src/deployments
+    cd ViFunctions
   ```
 2. **Build Container Image**
   ```bash
-    git clone https://github.com/hacksider/Deep-Live-Cam.git
-    cd Deep-Live-Cam
+    cd src/deployments
+    chmod +x build_images.sh
+    ./build_images.sh
   ```
 
 4. **Install Mysql(Optional)**
   ```bash
-    git clone https://github.com/hacksider/Deep-Live-Cam.git
-    cd Deep-Live-Cam
+    chmod +x install_mysql.sh
+    ./install_mysql.sh
   ```
 
-5. **Build and Deploy Helm Chart**
+5. **Build Helm Chart**
   ```bash
-    git clone https://github.com/hacksider/Deep-Live-Cam.git
-    cd Deep-Live-Cam
+    cd src/deployments/vifunction
+    helm dependency update
+    helm template vifunction . --namespace vifunction-ns --debug -f values-local.yaml
   ```
 
-5. **Test Api with Postman**
+
+5. **Deploy App**
+  ```bash
+    cd ..
+    chmod +x install_app.sh
+    ./install_app.sh
+  ```
+
+6. **Test Api with Postman**
   ```bash
     git clone https://github.com/hacksider/Deep-Live-Cam.git
     cd Deep-Live-Cam
