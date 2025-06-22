@@ -40,7 +40,7 @@ jobs:
           file: ./src/ViFunction.Store/Containerfile 
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/vi-function-test/vifunction-store:latest
+          tags: ${{ secrets.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/vifunction-store:latest
       
       - name: Build and push vifunction-gateway
         uses: docker/build-push-action@v3
@@ -49,7 +49,7 @@ jobs:
           file: ./src/ViFunction.Gateway/Containerfile 
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/vi-function-test/vifunction-gateway:latest
+          tags: ${{ secrets.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/vifunction-gateway:latest
       
       - name: Build and push vifunction-imagebuilder
         uses: docker/build-push-action@v3
@@ -58,7 +58,7 @@ jobs:
           file: ./src/ViFunction.ImageBuilder/Containerfile 
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/vi-function-test/vifunction-imagebuilder:latest
+          tags: ${{ secrets.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/vifunction-imagebuilder:latest
 
       - name: Build and push vifunction-kubeops
         uses: docker/build-push-action@v3
@@ -67,5 +67,5 @@ jobs:
           file: ./src/ViFunction.KubeOps/Containerfile 
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/vi-function-test/vifunction-kubeops:latest
+          tags: ${{ secrets.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_REPOSITORY }}/vifunction-kubeops:latest
           
