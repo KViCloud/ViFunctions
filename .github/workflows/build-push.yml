@@ -34,7 +34,7 @@ jobs:
             create_credentials_file: true
             token_format: access_token
             workload_identity_provider: projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.GCP_WIF_POOL }}/providers/${{ env.GCP_WIF_PROVIDER }}
-            service_account:  github-actions@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+            service_account:  github-vi-actions-workflow@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: Configure Docker for GCR
         run: |
