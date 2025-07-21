@@ -15,6 +15,7 @@ env:
   REGISTRY: us-central1-docker.pkg.dev
   GCP_WIF_POOL: github-vi-actions
   GCP_WIF_PROVIDER: github-vi-actions-oidc
+  GCP_REPOSITORY: serverless-kernel
 
 jobs:
   build:
