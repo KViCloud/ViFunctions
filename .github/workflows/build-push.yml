@@ -77,3 +77,11 @@ jobs:
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_REPOSITORY }}/vifunction-kubeops:latest
           
+      - name: Build and push vifunction-edgerouter
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/ViFunction.EdgeRouter
+          file: ./src/ViFunction.EdgeRouter/Containerfile 
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_REPOSITORY }}/vifunction-edgerouter:latest
