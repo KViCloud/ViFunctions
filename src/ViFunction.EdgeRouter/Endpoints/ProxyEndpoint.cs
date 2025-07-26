@@ -21,6 +21,13 @@ public static class ProxyEndpoint
             logger.LogInformation("Method: {Method}", context.Request.Method);
             logger.LogInformation("Path: {Path}", context.Request.Path);
 
+            var clientIp = context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                           ?? context.Connection.RemoteIpAddress?.ToString();
+            var userAgent = context.Request.Headers["User-Agent"].ToString();
+
+            logger.LogInformation("Client IP: {ClientIp}", clientIp ?? "Unknown");
+            logger.LogInformation("User-Agent: {UserAgent}", userAgent ?? "Unknown");
+
             if (!string.Equals(prefix, "function", StringComparison.OrdinalIgnoreCase))
                 return Results.NotFound();
 
