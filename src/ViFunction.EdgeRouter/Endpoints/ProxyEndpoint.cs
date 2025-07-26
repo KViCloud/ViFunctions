@@ -17,9 +17,12 @@ public static class ProxyEndpoint
         {
             var logger = app.Logger;
 
-            logger.LogInformation("Proxying request:");
+            logger.LogInformation("=== Incoming Request ===");
             logger.LogInformation("Method: {Method}", context.Request.Method);
+            logger.LogInformation("Scheme: {Scheme}", context.Request.Scheme);
+            logger.LogInformation("Host: {Host}", context.Request.Host);
             logger.LogInformation("Path: {Path}", context.Request.Path);
+            logger.LogInformation("QueryString: {QueryString}", context.Request.QueryString);
 
             var clientIp = context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
                            ?? context.Connection.RemoteIpAddress?.ToString();
@@ -27,6 +30,12 @@ public static class ProxyEndpoint
 
             logger.LogInformation("Client IP: {ClientIp}", clientIp ?? "Unknown");
             logger.LogInformation("User-Agent: {UserAgent}", userAgent ?? "Unknown");
+
+            logger.LogInformation("Headers:");
+            foreach (var header in context.Request.Headers)
+            {
+                logger.LogInformation("  {Key}: {Value}", header.Key, string.Join(", ", header.Value.ToString()));
+            }
 
             if (!string.Equals(prefix, "function", StringComparison.OrdinalIgnoreCase))
                 return Results.NotFound();
