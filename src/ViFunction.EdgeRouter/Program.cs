@@ -1,3 +1,4 @@
+using Prometheus;
 using ViFunction.EdgeRouter.Endpoints;
 using ViFunction.EdgeRouter.Extensions;
 
@@ -9,5 +10,5 @@ var app = builder.Build();
 
 app.MapGet("/", () => "ViFunction Edge Router is running...");
 app.MapProxy();
-
+app.UseEdgeRouterMetrics();
 app.Run();
