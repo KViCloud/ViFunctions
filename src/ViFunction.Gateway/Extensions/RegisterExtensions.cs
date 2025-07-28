@@ -33,7 +33,7 @@ public static class RegisterExtensions
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowAnyOrigin()
-                .WithOrigins("http://localhost:3000,https://vifunction-ui.solocode.click");
+                .WithOrigins("http://localhost:3000","https://vifunction-ui.solocode.click");
         }));
     }
 }
