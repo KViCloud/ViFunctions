@@ -27,6 +27,7 @@ app.MapControllers();
 
 app.MapGet("/", () => "Healthy!");
 
+app.UseCors("CorsPolicy");
 app.Run();
 
 namespace ViFunction.Gateway
