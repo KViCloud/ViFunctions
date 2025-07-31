@@ -23,6 +23,7 @@ The architecture of our cloud function platform consists of several key componen
 - **Functions deployer**: The service deploys function apps to a Kubernetes cluster.
 - **Zero scale**: Automatically adjusts the number of instances running to zero.
 - **Function ingress**: The service functions as a router, directing external requests to the function apps.
+<img width="7587" height="2733" alt="image" src="https://github.com/user-attachments/assets/652adb90-b5db-4747-b518-c0ca3067535c" />
 
 ## Local Development
 
