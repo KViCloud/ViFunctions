@@ -26,5 +26,14 @@ public static class RegisterExtensions
 
         builder.Services.AddRefitClient<IKubeOps>()
             .ConfigureHttpClient(c => c.BaseAddress = new Uri(kubeOpsUrl!));
+
+        builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+        {
+            builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowAnyOrigin()
+                .WithOrigins("http://localhost:3000","https://vifunction-ui.solocode.click");
+        }));
     }
 }

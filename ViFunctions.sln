@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViFunction.ImageBuilder", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViFunction.KubeOps", "src\ViFunction.KubeOps\ViFunction.KubeOps.csproj", "{0D18F6CA-BB00-4427-8D79-D4692DA14582}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViFunction.EdgeRouter", "src\ViFunction.EdgeRouter\ViFunction.EdgeRouter.csproj", "{F649CE2F-6D4F-493F-866A-D7B482994450}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{0D18F6CA-BB00-4427-8D79-D4692DA14582}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D18F6CA-BB00-4427-8D79-D4692DA14582}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D18F6CA-BB00-4427-8D79-D4692DA14582}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F649CE2F-6D4F-493F-866A-D7B482994450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F649CE2F-6D4F-493F-866A-D7B482994450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F649CE2F-6D4F-493F-866A-D7B482994450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F649CE2F-6D4F-493F-866A-D7B482994450}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
