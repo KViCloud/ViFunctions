@@ -3,11 +3,12 @@ name: Build and Push images to GCR
 on:
   push:
     branches:
+      - main
       - develop
 
 permissions:
   id-token: write
-  contents: read 
+  contents: read
 
 env:
   GCP_PROJECT_ID: vi-function
@@ -32,10 +33,10 @@ jobs:
       - name: Obtain access token by using workload identity federation
         uses: google-github-actions/auth@v2
         with:
-            create_credentials_file: true
-            token_format: access_token
-            workload_identity_provider: projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.GCP_WIF_POOL }}/providers/${{ env.GCP_WIF_PROVIDER }}
-            service_account:  github-vi-actions-workflow@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+          create_credentials_file: true
+          token_format: access_token
+          workload_identity_provider: projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.GCP_WIF_POOL }}/providers/${{ env.GCP_WIF_PROVIDER }}
+          service_account: github-vi-actions-workflow@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: Configure Docker for GCR
         run: |
@@ -45,25 +46,25 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./src/ViFunction.Store
-          file: ./src/ViFunction.Store/Containerfile 
+          file: ./src/ViFunction.Store/Containerfile
           platforms: linux/amd64
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_REPOSITORY }}/vifunction-store:latest
-      
+
       - name: Build and push vifunction-gateway
         uses: docker/build-push-action@v3
         with:
           context: ./src/ViFunction.Gateway
-          file: ./src/ViFunction.Gateway/Containerfile 
+          file: ./src/ViFunction.Gateway/Containerfile
           platforms: linux/amd64
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_REPOSITORY }}/vifunction-gateway:latest
-      
+
       - name: Build and push vifunction-imagebuilder
         uses: docker/build-push-action@v3
         with:
           context: ./src/ViFunction.ImageBuilder
-          file: ./src/ViFunction.ImageBuilder/Containerfile 
+          file: ./src/ViFunction.ImageBuilder/Containerfile
           platforms: linux/amd64
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_REPOSITORY }}/vifunction-imagebuilder:latest
@@ -72,16 +73,16 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./src/ViFunction.KubeOps
-          file: ./src/ViFunction.KubeOps/Containerfile 
+          file: ./src/ViFunction.KubeOps/Containerfile
           platforms: linux/amd64
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_REPOSITORY }}/vifunction-kubeops:latest
-          
+
       - name: Build and push vifunction-edgerouter
         uses: docker/build-push-action@v3
         with:
           context: ./src/ViFunction.EdgeRouter
-          file: ./src/ViFunction.EdgeRouter/Containerfile 
+          file: ./src/ViFunction.EdgeRouter/Containerfile
           platforms: linux/amd64
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_REPOSITORY }}/vifunction-edgerouter:latest
