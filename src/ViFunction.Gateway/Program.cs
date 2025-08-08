@@ -12,6 +12,22 @@ builder.Services.AddControllers()
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
   });
 
+var allowedOrigins = new[]
+{
+    "https://vifunction-ui.openvicloud.com"
+};
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 builder.AddServiceDefaults();
 
 var app = builder.Build();
@@ -27,7 +43,8 @@ app.MapControllers();
 
 app.MapGet("/", () => "Healthy!");
 
-app.UseCors("CorsPolicy");
+
+app.UseCors("AllowFrontend");
 app.Run();
 
 namespace ViFunction.Gateway
