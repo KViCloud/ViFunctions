@@ -27,18 +27,18 @@ public static class RegisterExtensions
         builder.Services.AddRefitClient<IKubeOps>()
             .ConfigureHttpClient(c => c.BaseAddress = new Uri(kubeOpsUrl!));
 
-//        var allowedOrigins = new[]
-//        {
-//            "https://vifunction-ui.openvicloud.com",
-//            "http://localhost:3000",
-//            "http://localhost:8080"
-//        };
+        var allowedOrigins = new[]
+        {
+            "https://vifunction-ui.openvicloud.com",
+            "http://localhost:3000",
+            "http://localhost:8080"
+        };
 
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowFrontend", policy =>
             {
-                policy.AllowAnyOrigin()
+                policy.WithOrigins(allowedOrigins)
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();

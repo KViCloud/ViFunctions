@@ -22,14 +22,15 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-app.UseHttpsRedirection();app.UseRouting();
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors("AllowFrontend");
 
 app.MapControllers();
 
 app.MapGet("/", () => "Healthy!");
 
 
-app.UseCors("AllowFrontend");
 app.Run();
 
 namespace ViFunction.Gateway
